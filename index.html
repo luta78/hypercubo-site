@@ -8,6 +8,9 @@
 <style>
   :root { --bg:#131417; --fg:#e6e6e6; --dim:#8c9199; --line:#2a2c31; --shade:#686e77; --lit:#aab0b8; }
   * { box-sizing:border-box; }
+  /* phones paint a blue box over whatever is tapped; the page shows its own states. Focus rings stay for the keyboard only */
+  * { -webkit-tap-highlight-color:transparent; }
+  :focus:not(:focus-visible) { outline:none; }
   /* the first page is fixed: the page never scrolls, the wheel only plays the logo's story */
   html, body { margin:0; height:100%; overflow:hidden; background:var(--bg); color:var(--fg); font:15px/1.5 system-ui, -apple-system, 'Segoe UI', sans-serif; }
   .bar { position:fixed; top:0; left:0; right:0; height:48px; display:flex; align-items:center; justify-content:space-between; padding:0 22px; background:rgba(10,10,12,.92); border-bottom:1px solid var(--line); z-index:5; font:600 12px system-ui, sans-serif; letter-spacing:.12em; text-transform:uppercase; }

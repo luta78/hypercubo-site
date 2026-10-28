@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <title>hypercubo.fr — the ◇ is the flow (test)</title>
 <style>
@@ -16,7 +17,7 @@
   /* products: a small menu under the word, on hover or keyboard focus */
   .menu { position:relative; }
   .menu .drop { display:none; position:absolute; top:calc(100% + 14px); left:-14px; min-width:300px; background:#17181b; border:1px solid var(--line); padding:6px 0; text-transform:none; letter-spacing:0; }
-  .menu:hover .drop, .menu:focus-within .drop { display:block; }
+  .menu:hover .drop, .menu:focus-within .drop, .menu.open .drop { display:block; }
   .menu .drop::before { content:''; position:absolute; left:0; right:0; top:-16px; height:16px; }
   .menu .item { display:flex; flex-direction:column; gap:2px; padding:9px 14px; }
   .menu .item:hover { background:#202126; }
@@ -69,6 +70,27 @@
   .note .ends { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
   .note button { font:11px 'JetBrains Mono', Consolas, monospace; background:#232428; color:#cfd2d7; border:1px solid var(--line); padding:5px 9px; cursor:pointer; }
   .note button.on { border-color:var(--lit); color:#fff; }
+  .burger { display:none; background:none; border:0; padding:10px 4px; cursor:pointer; flex-direction:column; gap:4px; }
+  .burger i { display:block; width:20px; height:2px; background:#cfd2d7; }
+  /* phones: the links fold into the menu button, the product page scrolls with the film on top,
+     the features stack, the test panel stays on the computer */
+  @media (max-width:700px) {
+    .bar { padding:0 16px; }
+    .burger { display:flex; }
+    .bar nav { display:none; position:fixed; top:48px; left:0; right:0; flex-direction:column; gap:0; padding:6px 0; background:#17181b; border-bottom:1px solid var(--line); }
+    .bar.open nav { display:flex; }
+    .bar nav > span { padding:12px 16px; }
+    .menu .drop { display:block; position:static; min-width:0; border:0; padding:4px 0 0; background:none; }
+    .menu .drop::before { display:none; }
+    .menu .item { padding:8px 0 8px 12px; }
+    .note { display:none; }
+    .page { overflow-y:auto; }
+    .page .hero { flex:0 0 auto; height:62vh; }
+    .page .feats { grid-template-columns:1fr; }
+    .page .sub { font-size:14px; }
+    .page .hero .tag { display:none; }
+    #s .ttl { font-size:54px; } #s .tsb { font-size:34px; } #s .ten { font-size:26px; }
+  }
 </style>
 </head>
 <body>
@@ -79,7 +101,8 @@
       <span class="item"><b>CUB◇ GLTF importers</b><small>glTF models into Maya, Blender, Houdini, 3ds Max, Cinema 4D</small></span>
     </span>
   </span>
-  <span>gallery</span><span>docs</span><span>about</span><span>buy</span></nav></div>
+  <span>gallery</span><span>docs</span><span>about</span><span>buy</span></nav>
+  <button class="burger" id="burger" aria-label="menu"><i></i><i></i><i></i></button></div>
 
 <!-- the placeholder (a MiniMax clay-to-final render) until the real promo -->
 <video id="bgv" autoplay muted loop playsinline>
@@ -192,10 +215,13 @@ const tFr = mk('text', { ...fontAttrs, 'font-weight': 400, fill: '#8c9199', 'tex
 const gMir = mk('g', {}); const tMir = mk('text', { ...fontAttrs, 'text-anchor': 'end' }, gMir); tMir.textContent = 'CUB';
 
 // ending "colours": the product line under the ◇
-const tTitle = mk('text', { ...fontAttrs, 'font-size': 30, 'text-anchor': 'middle', 'letter-spacing': '1' });
-const tSub = mk('text', { ...fontAttrs, 'font-size': 18, 'font-weight': 400, fill: SHADE, 'text-anchor': 'middle', 'letter-spacing': '0.5' });
-const tEnter = mk('text', { 'font-family': '"JetBrains Mono", Consolas, monospace', 'font-size': 12, 'letter-spacing': '1.5', fill: '#8c9199', 'text-anchor': 'middle' });
-tEnter.textContent = 'click the ◇ to enter';
+const tTitle = mk('text', { ...fontAttrs, class: 'ttl', 'font-size': 30, 'text-anchor': 'middle', 'letter-spacing': '1' });
+const tSub = mk('text', { ...fontAttrs, class: 'tsb', 'font-size': 18, 'font-weight': 400, fill: SHADE, 'text-anchor': 'middle', 'letter-spacing': '0.5' });
+const tEnter = mk('text', { class: 'ten', 'font-family': '"JetBrains Mono", Consolas, monospace', 'font-size': 12, 'letter-spacing': '1.5', fill: '#8c9199', 'text-anchor': 'middle' });
+// phones: the drawing is shrunk to the narrow screen, so the words under the ◇ get bigger and more room (CSS + gaps)
+const PHONE = matchMedia('(max-width:700px)').matches;
+const GAP = PHONE ? [86, 140, 196] : [70, 102, 142];
+tEnter.textContent = PHONE ? 'tap the ◇ to enter' : 'click the ◇ to enter';
 // ending "eight": one small ◇ per DCC, with its name
 const eight = FORKS.map(([name, c]) => {
   const d = makeDia(); const t = mk('text', { 'font-family': 'system-ui, sans-serif', 'font-weight': 600, 'font-size': 15, 'text-anchor': 'middle', fill: c }); t.textContent = name;
@@ -262,7 +288,7 @@ function render(p) {
   if (dv > 0) { const s = lerp(1, 30, dv * dv); a *= s; b *= s; sw *= s; letters *= 1 - dv; if (line) line[3] *= 1 - dv; }
   document.querySelector('.stage').classList.toggle('can-enter', !!enterable && dive === 0);
   tEnter.style.opacity = enterable && dive === 0 ? 1 : 0;
-  tEnter.setAttribute('x', 500); tEnter.setAttribute('y', cy + a + 142);
+  tEnter.setAttribute('x', 500); tEnter.setAttribute('y', cy + a + GAP[2]);
   tTitle.style.opacity = line ? line[3] : 0; tSub.style.opacity = line ? line[3] : 0;
   if (line) {
     tTitle.setAttribute('fill', line[2]); tSub.textContent = line[1];
@@ -272,8 +298,8 @@ function render(p) {
       const nm = document.createElementNS(NS, 'tspan'); nm.textContent = line[4]; nm.setAttribute('fill', line[5]);
       tTitle.appendChild(nm);
     } else tTitle.textContent = line[0];
-    tTitle.setAttribute('x', 500); tTitle.setAttribute('y', cy + a + 70);
-    tSub.setAttribute('x', 500); tSub.setAttribute('y', cy + a + 102);
+    tTitle.setAttribute('x', 500); tTitle.setAttribute('y', cy + a + GAP[0]);
+    tSub.setAttribute('x', 500); tSub.setAttribute('y', cy + a + GAP[1]);
   }
   main.g.style.opacity = mainAlpha * introK;
   main.g.style.filter = flash > 0 ? `drop-shadow(0 0 ${14 * flash}px rgba(240,255,65,${0.55 * flash}))` : '';
@@ -411,6 +437,11 @@ document.getElementById('s').addEventListener('click', () => {
   if (!enterable || dive > 0) return;
   diveTo = enterable; fillPage(diveTo); diveDir = 1;
 });
+// a finger cannot hover: the menu button and "products" open on a tap, a tap elsewhere closes them
+const bar = document.querySelector('.bar'), menu = document.querySelector('.menu');
+document.getElementById('burger').onclick = e => { e.stopPropagation(); bar.classList.toggle('open'); };
+menu.addEventListener('click', e => { e.stopPropagation(); menu.classList.toggle('open'); });
+addEventListener('click', () => { bar.classList.remove('open'); menu.classList.remove('open'); });
 let touchY = null;
 addEventListener('touchstart', e => { touchY = e.touches[0].clientY; }, { passive: true });
 // a swipe of 60 px is one step; keys step too (Home / End jump to the ends)

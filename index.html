@@ -440,16 +440,21 @@ function fillPage(prod) {
   page.querySelectorAll('.feat').forEach(f => f.onclick = () => pick(+f.dataset.i));
   pick(0);
   // the ◇ was the only way out and nobody found it (user 10-28): a plain "back" arrow too
-  const goBack = () => { diveDir = -1; page.querySelector('video').pause(); };
   document.getElementById('back').onclick = goBack;
   document.getElementById('ret').onclick = goBack;
 }
+// a product page is a history step, so the phone's back gesture (and the browser's back) closes it;
+// our own back buttons go through history too, so the step is used up either way
+const enter = prod => { diveTo = prod; fillPage(prod); diveDir = 1; history.pushState({ product: prod.name }, ''); };
+const leave = () => { diveDir = -1; page.querySelector('video').pause(); };
+const goBack = () => history.state && history.state.product ? history.back() : leave();
+addEventListener('popstate', () => { if (dive > 0 || diveDir > 0) leave(); });
 // per-DCC promo films (C:\Project\Videos_promo, served on 8800 for the mockup); the rest use the placeholder
 const PROMO_HOST = 'films/';
 const PROMOS = { 'Maya': 'Maya_promo.mp4', 'Blender': 'Blender_promo.mp4', 'Houdini': 'Houdini_promo.mp4', '3ds Max': '3Dsmax_promo.mp4', 'Cinema 4D': 'cinema4d_promo.mp4' };
 document.getElementById('s').addEventListener('click', () => {
   if (!enterable || dive > 0) return;
-  diveTo = enterable; fillPage(diveTo); diveDir = 1;
+  enter(enterable);
 });
 // a finger cannot hover: the menu button and "products" open on a tap, a tap elsewhere closes them
 const bar = document.querySelector('.bar'), menu = document.querySelector('.menu');
@@ -468,7 +473,7 @@ addEventListener('keydown', e => {
   // Enter goes in through the ◇ on show, Esc comes back out
   if (e.key === 'Escape' && dive === 1) { document.getElementById('back').click(); return; }
   if (dive > 0) return;
-  if (e.key === 'Enter' && enterable) { e.preventDefault(); diveTo = enterable; fillPage(diveTo); diveDir = 1; return; }
+  if (e.key === 'Enter' && enterable) { e.preventDefault(); enter(enterable); return; }
   const k = { ArrowDown: 1, PageDown: 1, ' ': 1, ArrowUp: -1, PageUp: -1 }[e.key];
   if (k !== undefined) { e.preventDefault(); step(k); }
   if (e.key === 'Home') { e.preventDefault(); want = 0; }

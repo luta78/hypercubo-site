@@ -54,6 +54,8 @@
   .page .hero .tag { position:absolute; right:16px; top:14px; font:11px 'JetBrains Mono', Consolas, monospace; letter-spacing:.06em; color:#cfd2d7; background:rgba(19,20,23,.6); padding:4px 8px; }
   .page .back { display:flex; background:none; border:0; padding:0; cursor:pointer; transition:transform .25s, filter .25s; }
   .page .back:hover { transform:scale(.88); filter:brightness(1.25); }
+  .page .ret { position:absolute; left:max(16px, 5vw); top:16px; display:flex; align-items:center; gap:8px; padding:9px 16px 9px 12px; background:rgba(19,20,23,.65); border:1px solid #3a3d43; color:#e6e6e6; font:600 14px system-ui, sans-serif; letter-spacing:.04em; cursor:pointer; z-index:1; }
+  .page .ret:hover { border-color:var(--lit); background:rgba(19,20,23,.85); }
   .page .head { display:flex; align-items:center; gap:16px; margin:0 0 6px; }
   .page h1 { font:600 clamp(26px, 3.6vw, 46px) system-ui, sans-serif; margin:0; letter-spacing:.02em; }
   .page .sub { color:#8c9199; font-size:16px; margin:0 0 16px; }
@@ -422,6 +424,7 @@ function fillPage(prod) {
   const file = promo.split('/').pop();
   // no arrow: the ◇ you came in through is the way back out (user 10-14)
   page.innerHTML = `<div class="hero"><video autoplay muted loop playsinline src="${promo}"></video><div class="shade"></div>
+      <button class="ret" id="ret"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 8H3M7.5 3.5 3 8l4.5 4.5"/></svg>back</button>
       <div class="tag" id="ptag"></div>
       <div class="txt"><div class="head"><button class="back" id="back" title="back" aria-label="back">${smallDia(all ? null : prod.hex)}</button><h1 style="color:${LIT}">${title}</h1></div>
         <p class="sub">${sub}</p>
@@ -436,7 +439,10 @@ function fillPage(prod) {
   };
   page.querySelectorAll('.feat').forEach(f => f.onclick = () => pick(+f.dataset.i));
   pick(0);
-  document.getElementById('back').onclick = () => { diveDir = -1; page.querySelector('video').pause(); };
+  // the ◇ was the only way out and nobody found it (user 10-28): a plain "back" arrow too
+  const goBack = () => { diveDir = -1; page.querySelector('video').pause(); };
+  document.getElementById('back').onclick = goBack;
+  document.getElementById('ret').onclick = goBack;
 }
 // per-DCC promo films (C:\Project\Videos_promo, served on 8800 for the mockup); the rest use the placeholder
 const PROMO_HOST = 'films/';

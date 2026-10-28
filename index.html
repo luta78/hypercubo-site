@@ -246,8 +246,8 @@ function render(p) {
 
   // ending "the address": the mirror folds back into HYPERCUB◇ and ".fr" + the buttons come
   if (END === 'lockup') toMirror *= 1 - e1;
-  // phones: HYPERCUB◇ starts centred on the screen (measured letters), the computer keeps the ◇ at 650
-  const startX = PHONE ? 500 + (tHyper.getComputedTextLength() + 3 + tCub.getComputedTextLength() + gap) / 2 : 650;
+  // HYPERCUB◇ starts centred on the screen (measured letters); the mirror then brings the ◇ to the middle
+  const startX = 500 + (tHyper.getComputedTextLength() + 3 + tCub.getComputedTextLength() + gap) / 2;
   let cx = lerp(startX, 500, toMirror) - (END === 'lockup' ? e1 * 60 : 0), cy = baseY - capR;
   let a = capR, b = capR, sw = F * 0.115;
   const colEnd = END === 'colours';

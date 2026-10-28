@@ -81,9 +81,8 @@
   </span>
   <span>gallery</span><span>docs</span><span>about</span><span>buy</span></nav></div>
 
-<!-- promo.mp4 next to this page wins; until then the placeholder (a MiniMax clay-to-final render) -->
+<!-- the placeholder (a MiniMax clay-to-final render) until the real promo -->
 <video id="bgv" autoplay muted loop playsinline>
-  <source src="promo.mp4" type="video/mp4">
   <source src="films/promo_placeholder.mp4" type="video/mp4">
 </video>
 <div id="scrim"></div>
@@ -357,6 +356,8 @@ document.querySelectorAll('#bgopts button').forEach(b => b.onclick = () => {
   if (k === 'bg') { bgv.style.opacity = b.dataset.bg === 'video' ? 1 : 0; b.dataset.bg === 'video' ? bgv.play() : bgv.pause(); }
   else scrim.style.setProperty('--sc', b.dataset.sc);
 });
+// phones can refuse autoplay (low power / data saver): start the film on the first touch
+['touchend', 'click'].forEach(e => addEventListener(e, () => { if (bgv.paused && bgv.style.opacity !== '0') bgv.play().catch(() => {}); }));
 document.querySelectorAll('#nameopts button').forEach(b => b.onclick = () => {
   nameColour = b.dataset.nc === '1';
   document.querySelectorAll('#nameopts button').forEach(x => x.classList.toggle('on', x === b));

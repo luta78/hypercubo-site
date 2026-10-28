@@ -75,14 +75,20 @@
   /* phones: the links fold into the menu button, the product page scrolls with the film on top,
      the features stack, the test panel stays on the computer */
   @media (max-width:700px) {
-    .bar { padding:0 16px; }
-    .burger { display:flex; }
-    .bar nav { display:none; position:fixed; top:48px; left:0; right:0; flex-direction:column; gap:0; padding:6px 0; background:#17181b; border-bottom:1px solid var(--line); }
+    /* finger-sized: a 56 px bar, the menu rows at least 48 px tall with 16 px words */
+    .bar { padding:0 16px; height:56px; }
+    .bar .brand { font-size:17px; }
+    .burger { display:flex; gap:5px; padding:14px 8px; margin-right:-8px; }
+    .burger i { width:24px; }
+    .bar nav { display:none; position:fixed; top:56px; left:0; right:0; flex-direction:column; gap:0; padding:4px 0 10px; background:#17181b; border-bottom:1px solid var(--line); font-size:16px; }
     .bar.open nav { display:flex; }
-    .bar nav > span { padding:12px 16px; }
-    .menu .drop { display:block; position:static; min-width:0; border:0; padding:4px 0 0; background:none; }
+    .bar nav > span { padding:15px 20px; }
+    .menu .drop { display:block; position:static; min-width:0; border:0; padding:6px 0 0; background:none; }
     .menu .drop::before { display:none; }
-    .menu .item { padding:8px 0 8px 12px; }
+    .menu .item { padding:10px 0 10px 14px; }
+    .menu .item b { font-size:16px; }
+    .menu .item small { font-size:14px; }
+    .page { inset:56px 0 0 0; }
     .note { display:none; }
     .page { overflow-y:auto; }
     .page .hero { flex:0 0 auto; height:62vh; }

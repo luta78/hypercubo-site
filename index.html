@@ -75,8 +75,8 @@
 <div class="bar"><span class="brand" id="brand"></span><nav>
   <span class="menu" tabindex="0">products ▾
     <span class="drop">
-      <span class="item"><b>ComfyUI nodes</b><small>ViewportSync3D: your DCC scene live in ComfyUI</small></span>
-      <span class="item"><b>DCC importers</b><small>glTF models into Maya, Blender, Houdini, 3ds Max, Cinema 4D</small></span>
+      <span class="item"><b>CUB◇ nodes</b><small>ComfyUI nodes: your DCC scene live in ComfyUI</small></span>
+      <span class="item"><b>CUB◇ GLTF importers</b><small>glTF models into Maya, Blender, Houdini, 3ds Max, Cinema 4D</small></span>
     </span>
   </span>
   <span>gallery</span><span>docs</span><span>about</span><span>buy</span></nav></div>
@@ -111,6 +111,8 @@ const NS = 'http://www.w3.org/2000/svg';
 const SHADE = '#686e77', LIT = '#aab0b8', MUTE = '#3a3d43', YEL = '#f0ff41';
 const FORKS = [['Maya', '#38a5cc'], ['Blender', '#ea7600'], ['Houdini', '#ff6600'], ['3ds Max', '#399094'],
                ['Cinema 4D', '#2b2ca3'], ['Cascadeur', '#0092df'], ['ZBrush', '#b0a595'], ['Babylon', '#bb464b']];   // ZBrush: a warm clay grey, a little desaturated (user 10-14), not Maxon's orange, apart from the cool brand silver
+// node names: "CUB◇ for <DCC>"; Babylon is not a DCC, so "CUB◇ Babylon"
+const cubPrefix = name => name === 'Babylon' ? 'CUB◇ ' : 'CUB◇ for ';
 const tones = hex => [0, 255].map(to => '#' + [1, 3, 5].map(i => Math.round(parseInt(hex.slice(i, i + 2), 16) * 0.7 + to * 0.3).toString(16).padStart(2, '0')).join(''));
 const mixC = (a, b, t) => '#' + [1, 3, 5].map(i => Math.round(parseInt(a.slice(i, i + 2), 16) * (1 - t) + parseInt(b.slice(i, i + 2), 16) * t).toString(16).padStart(2, '0')).join('');
 const clamp01 = v => Math.max(0, Math.min(1, v));
@@ -246,11 +248,11 @@ function render(p) {
       cols = tones(hex); drawnD = seg(u, 0, 0.35); erasedD = seg(u, 0.72, 1);
       // only the ◇ carries the DCC colour; the text takes the brand silver's two tones (user 10-14):
       // title = lit silver, line under it = the dark grey
-      line = [`ViewportSync3D for ${name}`, PRODUCT_LINES[name], LIT, Math.min(drawnD, 1 - erasedD), name, cols[1]];
+      line = [cubPrefix(name) + name, PRODUCT_LINES[name], LIT, Math.min(drawnD, 1 - erasedD), name, cols[1]];
       if (line[3] > 0.6) enterable = { name, hex };
     } else if (q >= 1) {
       drawnD = seg(p, 0.92, 0.97); erasedD = 0;
-      line = ['ComfyUI nodes · DCC importers', 'one ◇ for every 3D program — hypercubo.fr', LIT, drawnD];
+      line = ['CUB◇ nodes · CUB◇ GLTF importers','one ◇ for every 3D program — hypercubo.fr', LIT, drawnD];
       if (drawnD > 0.6) enterable = { name: 'all' };
     }
   }
@@ -266,7 +268,7 @@ function render(p) {
     tTitle.setAttribute('fill', line[2]); tSub.textContent = line[1];
     // test: only the program name in the ◇'s lit tone, like the node header's DCC name
     if (nameColour && line[4]) {
-      tTitle.textContent = 'ViewportSync3D for ';
+      tTitle.textContent = cubPrefix(line[4]);
       const nm = document.createElementNS(NS, 'tspan'); nm.textContent = line[4]; nm.setAttribute('fill', line[5]);
       tTitle.appendChild(nm);
     } else tTitle.textContent = line[0];
@@ -374,11 +376,11 @@ ticks = [...rail.children];
 document.getElementById('hint').innerHTML = `scroll <span class="cue">${smallDia(null, 12)}</span>`;
 function fillPage(prod) {
   const all = prod.name === 'all';
-  const title = all ? 'Products' : `ViewportSync3D for ${prod.name}`;
+  const title = all ? 'Products' : cubPrefix(prod.name) + prod.name;
   const sub = all ? 'ComfyUI nodes for eight 3D programs, and glTF importers for five.' : PRODUCT_LINES[prod.name] + '.';
   const tiles = all
-    ? [['ComfyUI nodes', 'ViewportSync3D: your DCC scene live in ComfyUI. Maya, Blender, Houdini, 3ds Max, Cinema 4D, Cascadeur, ZBrush, Babylon.'],
-       ['DCC importers', 'glTF models into Maya, Blender, Houdini, 3ds Max and Cinema 4D.']]
+    ? [['CUB◇ nodes', 'Your DCC scene live in ComfyUI: CUB◇ for Maya, Blender, Houdini, 3ds Max, Cinema 4D, Cascadeur, ZBrush, and CUB◇ Babylon.'],
+       ['CUB◇ GLTF importers', 'glTF models into Maya, Blender, Houdini, 3ds Max and Cinema 4D: CUB◇ GLTF for each.']]
     : [['Live sync', `Work in ${prod.name}; the scene follows in ComfyUI.`], ['FX', 'Smoke, liquids, splats, lights - added in the viewer.'],
        ['Render passes', 'Depth, normals, edges and more, frame by frame.'], ['Send to AI', 'Feed the passes to image and video models.']];
   // the film: the program's own promo where we have one, else the placeholder clip

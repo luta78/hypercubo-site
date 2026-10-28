@@ -8,16 +8,13 @@
 <style>
   :root { --bg:#131417; --fg:#e6e6e6; --dim:#8c9199; --line:#2a2c31; --shade:#686e77; --lit:#aab0b8; }
   * { box-sizing:border-box; }
-  /* phones paint a blue box over whatever is tapped; the page shows its own states. Focus rings stay for the keyboard only */
   * { -webkit-tap-highlight-color:transparent; }
   :focus:not(:focus-visible) { outline:none; }
-  /* the first page is fixed: the page never scrolls, the wheel only plays the logo's story */
   html, body { margin:0; height:100%; overflow:hidden; background:var(--bg); color:var(--fg); font:15px/1.5 system-ui, -apple-system, 'Segoe UI', sans-serif; }
   .bar { position:fixed; top:0; left:0; right:0; height:48px; display:flex; align-items:center; justify-content:space-between; padding:0 22px; background:rgba(10,10,12,.92); border-bottom:1px solid var(--line); z-index:5; font:600 12px system-ui, sans-serif; letter-spacing:.12em; text-transform:uppercase; }
   .bar nav { display:flex; gap:22px; color:#cfd2d7; }
   .bar .brand { letter-spacing:.04em; font-size:15px; }
   .bar nav > span { cursor:default; }
-  /* products: a small menu under the word, on hover or keyboard focus */
   .menu { position:relative; }
   .menu .drop { display:none; position:absolute; top:calc(100% + 14px); left:-14px; min-width:300px; background:#17181b; border:1px solid var(--line); padding:6px 0; text-transform:none; letter-spacing:0; }
   .menu:hover .drop, .menu:focus-within .drop, .menu.open .drop { display:block; }
@@ -26,14 +23,12 @@
   .menu .item:hover { background:#202126; }
   .menu .item b { font:600 13px system-ui, sans-serif; color:#e6e6e6; }
   .menu .item small { font:12px system-ui, sans-serif; color:var(--dim); }
-  /* the background film (Maxon-like): our promo video later; a scrim keeps the ◇ and text readable */
   #bgv { position:fixed; inset:0; width:100%; height:100%; object-fit:cover; transition:opacity .6s; }
   #scrim { position:fixed; inset:0; background:radial-gradient(ellipse 70% 60% at 50% 50%, rgba(19,20,23,var(--sc)) 0%, rgba(19,20,23,calc(var(--sc) * .6 + .3)) 100%); --sc:.6; }
   #story { position:fixed; inset:0; }
   .stage { position:absolute; inset:0; overflow:hidden; display:flex; align-items:center; justify-content:center; }
   #s { width:min(1100px, 100vw); height:auto; max-height:86vh; overflow:visible; }
   .caption { position:absolute; left:0; right:0; bottom:9vh; text-align:center; font:13px 'JetBrains Mono', Consolas, monospace; letter-spacing:.08em; color:var(--dim); }
-  /* soft backing so the rail reads over the film */
   .rail { position:absolute; left:18px; top:50%; transform:translateY(-50%); display:flex; flex-direction:column; gap:14px; padding:12px 8px; background:rgba(19,20,23,.55); backdrop-filter:blur(6px); }
   .rail .tick { display:flex; transition:opacity .4s, transform .4s; }
   .rail svg { display:block; }
@@ -45,11 +40,8 @@
   .cta span.main { background:#e6e6e6; color:#131417; border-color:#e6e6e6; }
   .after { min-height:60vh; display:flex; align-items:center; justify-content:center; border-top:1px solid var(--line); color:var(--dim); font:13px 'JetBrains Mono', Consolas, monospace; }
   .stage.can-enter #s { cursor:pointer; }
-  /* the product page you reach by diving through the ◇ */
-  /* one screen, no scrolling (user 10-14): the film on top, the features in one row under it;
-     a feature is picked by a click, not by scrolling */
   .page { position:fixed; inset:48px 0 0 0; background:var(--bg); overflow:hidden; z-index:3; display:flex; flex-direction:column; }
-  .page[hidden] { display:none; }   /* display:flex above would beat the hidden attribute: an invisible page swallowed every click */
+  .page[hidden] { display:none; }   
   .page .hero { position:relative; flex:1 1 auto; min-height:0; overflow:hidden; background:#0c0d0f; }
   .page .hero video { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
   .page .hero .shade { position:absolute; inset:0; background:linear-gradient(to top, rgba(19,20,23,.92) 0%, rgba(19,20,23,.35) 45%, rgba(19,20,23,0) 70%), linear-gradient(to right, rgba(19,20,23,.55), rgba(19,20,23,0) 60%); }
@@ -77,10 +69,7 @@
   .note button.on { border-color:var(--lit); color:#fff; }
   .burger { display:none; background:none; border:0; padding:10px 4px; cursor:pointer; flex-direction:column; gap:4px; }
   .burger i { display:block; width:20px; height:2px; background:#cfd2d7; }
-  /* phones: the links fold into the menu button, the product page scrolls with the film on top,
-     the features stack, the test panel stays on the computer */
   @media (max-width:700px) {
-    /* finger-sized: a 56 px bar, the menu rows at least 48 px tall with 16 px words */
     .bar { padding:0 16px; height:56px; }
     .bar .brand { font-size:17px; }
     .burger { display:flex; gap:5px; padding:14px 8px; margin-right:-8px; }
@@ -115,7 +104,6 @@
   <span>gallery</span><span>docs</span><span>about</span><span>buy</span></nav>
   <button class="burger" id="burger" aria-label="menu"><i></i><i></i><i></i></button></div>
 
-<!-- the placeholder (a MiniMax clay-to-final render) until the real promo -->
 <video id="bgv" autoplay muted loop playsinline>
   <source src="films/promo_placeholder.mp4" type="video/mp4">
 </video>
@@ -144,8 +132,7 @@
 const NS = 'http://www.w3.org/2000/svg';
 const SHADE = '#686e77', LIT = '#aab0b8', MUTE = '#3a3d43', YEL = '#f0ff41';
 const FORKS = [['Maya', '#38a5cc'], ['Blender', '#ea7600'], ['Houdini', '#ff6600'], ['3ds Max', '#399094'],
-               ['Cinema 4D', '#2b2ca3'], ['Cascadeur', '#0092df'], ['ZBrush', '#b0a595'], ['Babylon', '#bb464b']];   // ZBrush: a warm clay grey, a little desaturated (user 10-14), not Maxon's orange, apart from the cool brand silver
-// node names: "CUB◇ for <DCC>"; Babylon is not a DCC, so "CUB◇ Babylon"
+               ['Cinema 4D', '#2b2ca3'], ['Cascadeur', '#0092df'], ['ZBrush', '#b0a595'], ['Babylon', '#bb464b']];
 const cubPrefix = name => name === 'Babylon' ? 'CUB◇ ' : 'CUB◇ for ';
 const tones = hex => [0, 255].map(to => '#' + [1, 3, 5].map(i => Math.round(parseInt(hex.slice(i, i + 2), 16) * 0.7 + to * 0.3).toString(16).padStart(2, '0')).join(''));
 const mixC = (a, b, t) => '#' + [1, 3, 5].map(i => Math.round(parseInt(a.slice(i, i + 2), 16) * (1 - t) + parseInt(b.slice(i, i + 2), 16) * t).toString(16).padStart(2, '0')).join('');
@@ -154,7 +141,6 @@ const ease = t => { t = clamp01(t); return t * t * (3 - 2 * t); };
 const seg = (p, a, b) => ease((p - a) / (b - a));
 const lerp = (a, b, t) => a + (b - a) * t;
 
-// the endings to compare (what happens after the mirror, from 66 % of the scroll)
 const ENDS = {
   colours: { label: 'colours + products', cap: 'one ◇ for every 3D program' },
   lockup: { label: 'the address', cap: 'hypercubo.fr' },
@@ -162,7 +148,6 @@ const ENDS = {
   sync:   { label: 'the sync flash', cap: 'in sync' },
 };
 let END = 'colours';
-// what each ◇ says in the colours ending (one line per node)
 const PRODUCT_LINES = {
   'Maya': 'your Maya scene, live in ComfyUI', 'Blender': 'your Blender scene, live in ComfyUI',
   'Houdini': 'your Houdini scene, live in ComfyUI', '3ds Max': 'your 3ds Max scene, live in ComfyUI',
@@ -170,25 +155,20 @@ const PRODUCT_LINES = {
   'ZBrush': 'your sculpt, straight into ComfyUI', 'Babylon': 'the free, open-source edition',
 };
 
-// no cube at the start (user 10-14): the page opens on HYPERCUB◇ - the ◇ draws, the name appears
-// HYPERCUB◇ -> the mirror is short (user: fewer scrolls): about 2 wheel notches
 const STEPS = [
   [0.00, 'hypercubo.fr'],
   [0.03, 'one scene, two sides: the family'],
   [0.15, ''],
 ];
-// the ending's DCC walk: eight equal stretches of the scroll
 const D0 = 0.22, D1 = 0.92;
-let nameColour = true;   // test toggle: the program name in its ◇'s lit tone
+let nameColour = true;
 
 const svg = document.getElementById('s');
 const mk = (tag, attrs, parent = svg) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); parent.appendChild(e); return e; };
 const defs = mk('defs', {});
 
-// no cube anywhere (user 10-14: a thick iso cube reads as Unity's logo) - only the ◇ and the words
 const CY = 300;
 
-// a diamond: two halves clipped to the outer contour (sharp tips), any width / height
 let dn = 0;
 function makeDia(parent = svg) {
   const id = 'dc' + (dn++);
@@ -197,7 +177,6 @@ function makeDia(parent = svg) {
   const halves = [0, 1].map(() => mk('polyline', { 'clip-path': `url(#${id})`, 'stroke-linejoin': 'miter' }, g));
   return {
     g,
-    // erased > 0 wipes the halves away from the bottom point up (the node logo's erase)
     draw(cx, cy, a, b, sw, cols, drawn = 1, erased = 0) {
       poly.setAttribute('points', `${cx},${cy - b} ${cx + a},${cy} ${cx},${cy + b} ${cx - a},${cy}`);
       const ix = (sw / 2) / Math.sin(Math.atan(b / a)), iy = (sw / 2) / Math.sin(Math.atan(a / b));
@@ -217,7 +196,6 @@ function makeDia(parent = svg) {
 }
 const main = makeDia();
 
-// the words: HYPER + CUB before the diamond, ".fr" after it, the mirrored CUB after it
 const F = 92, CAP = F * 0.7;
 const fontAttrs = { 'font-family': 'system-ui, -apple-system, "Segoe UI", sans-serif', 'font-weight': 600, 'font-size': F, 'letter-spacing': '3', fill: '#e6e6e6' };
 const tHyper = mk('text', { ...fontAttrs, 'text-anchor': 'end' }); tHyper.textContent = 'HYPER';
@@ -225,57 +203,45 @@ const tCub = mk('text', { ...fontAttrs, 'text-anchor': 'end' }); tCub.textConten
 const tFr = mk('text', { ...fontAttrs, 'font-weight': 400, fill: '#8c9199', 'text-anchor': 'start' }); tFr.textContent = '.fr';
 const gMir = mk('g', {}); const tMir = mk('text', { ...fontAttrs, 'text-anchor': 'end' }, gMir); tMir.textContent = 'CUB';
 
-// ending "colours": the product line under the ◇
 const tTitle = mk('text', { ...fontAttrs, class: 'ttl', 'font-size': 30, 'text-anchor': 'middle', 'letter-spacing': '1' });
 const tSub = mk('text', { ...fontAttrs, class: 'tsb', 'font-size': 18, 'font-weight': 400, fill: SHADE, 'text-anchor': 'middle', 'letter-spacing': '0.5' });
 const tEnter = mk('text', { class: 'ten', 'font-family': '"JetBrains Mono", Consolas, monospace', 'font-size': 12, 'letter-spacing': '1.5', fill: '#8c9199', 'text-anchor': 'middle' });
-// phones: the drawing is shrunk to the narrow screen, so the words under the ◇ get bigger and more room (CSS + gaps)
 const PHONE = matchMedia('(max-width:700px)').matches;
 const GAP = PHONE ? [86, 140, 196] : [70, 102, 142];
 tEnter.textContent = PHONE ? 'tap the ◇ to enter' : 'click the ◇ to enter';
-// ending "eight": one small ◇ per DCC, with its name
 const eight = FORKS.map(([name, c]) => {
   const d = makeDia(); const t = mk('text', { 'font-family': 'system-ui, sans-serif', 'font-weight': 600, 'font-size': 15, 'text-anchor': 'middle', fill: c }); t.textContent = name;
   return { d, t, cols: tones(c) };
 });
 
-// the left rail: one small ◇ per step (our open ◇, built below once smallDia exists)
 const rail = document.getElementById('rail');
 let ticks = [];
 document.getElementById('brand').innerHTML = 'HYPERCUB<svg width="11" height="11" viewBox="0 0 14 14" style="margin-left:1px;vertical-align:-1px"><polygon points="7,1.6 12.4,7 7,12.4 1.6,7" fill="none" stroke="#aab0b8" stroke-width="2.4"/></svg>';
 
-let introK = 0;   // the opening: the ◇ draws itself once on load, then the letters appear
-// the ◇ is the door: while a product's ◇ stands, a click dives through it into its page
-let enterable = null;   // { name, hex } of the ◇ on screen, or { name: 'all' } at the silver end
+let introK = 0;
+let enterable = null;
 let dive = 0, diveDir = 0, diveTo = null;
 function render(p) {
   const drawnK = clamp01(introK / 0.5), letterK = clamp01((introK - 0.45) / 0.55);
   let toMirror = seg(p, 0.03, 0.10);
   const e1 = seg(p, 0.15, 0.28), e2 = seg(p, 0.34, 0.52);
-  // the ◇ as the O: one cap tall, on the baseline
   const capR = CAP / 2, gap = 8, baseY = CY + CAP / 2;
 
-  // ending "the address": the mirror folds back into HYPERCUB◇ and ".fr" + the buttons come
   if (END === 'lockup') toMirror *= 1 - e1;
-  // HYPERCUB◇ starts centred on the screen (measured letters); the mirror then brings the ◇ to the middle
   const startX = 500 + (tHyper.getComputedTextLength() + 3 + tCub.getComputedTextLength() + gap) / 2;
   let cx = lerp(startX, 500, toMirror) - (END === 'lockup' ? e1 * 60 : 0), cy = baseY - capR;
   let a = capR, b = capR, sw = F * 0.115;
   const colEnd = END === 'colours';
   if (colEnd) {
-    // the ◇ grows (uniform scale, its own proportions), a little high to leave room for the words
     const zoomK = seg(p, 0.15, 0.19), s = lerp(1, 100 / a, zoomK);
     a *= s; b *= s; sw *= s; cy -= zoomK * 40;
   }
 
   let cols = [SHADE, LIT];
   let mainAlpha = 1, letters = 1;
-  const flash = END === 'sync' ? Math.sin(Math.PI * clamp01((p - 0.17) / 0.1)) : 0;   // 0 -> 1 -> 0
+  const flash = END === 'sync' ? Math.sin(Math.PI * clamp01((p - 0.17) / 0.1)) : 0;
   if (flash > 0) cols = [mixC(cols[0], YEL, flash * 0.85), mixC(cols[1], YEL, flash)];
   if (END === 'eight') { mainAlpha = 1 - e1; letters = 1 - e1; }
-  // ending "colours": the silver ◇ erases, then redraws itself in each DCC's two tones (the node
-  // logo's own draw / hold / erase), one per stretch of scroll, with its product line; at the
-  // end it redraws in silver with the closing line
   let drawnD = drawnK, erasedD = 0, line = null;
   enterable = null;
   if (colEnd) {
@@ -285,8 +251,6 @@ function render(p) {
     if (q >= 0 && q < 1) {
       const i = Math.min(7, Math.floor(q * 8)), u = q * 8 - i, [name, hex] = FORKS[i];
       cols = tones(hex); drawnD = seg(u, 0, 0.35); erasedD = seg(u, 0.72, 1);
-      // only the ◇ carries the DCC colour; the text takes the brand silver's two tones (user 10-14):
-      // title = lit silver, line under it = the dark grey
       line = [cubPrefix(name) + name, PRODUCT_LINES[name], LIT, Math.min(drawnD, 1 - erasedD), name, cols[1]];
       if (line[3] > 0.6) enterable = { name, hex };
     } else if (q >= 1) {
@@ -295,8 +259,6 @@ function render(p) {
       if (drawnD > 0.6) enterable = { name: 'all' };
     }
   }
-  // the dive: the ◇ grows past the viewer - its open middle swallows the screen - and the
-  // product page appears behind it; everything else fades
   const dv = ease(dive);
   if (dv > 0) { const s = lerp(1, 30, dv * dv); a *= s; b *= s; sw *= s; letters *= 1 - dv; if (line) line[3] *= 1 - dv; }
   document.querySelector('.stage').classList.toggle('can-enter', !!enterable && dive === 0);
@@ -305,7 +267,6 @@ function render(p) {
   tTitle.style.opacity = line ? line[3] : 0; tSub.style.opacity = line ? line[3] : 0;
   if (line) {
     tTitle.setAttribute('fill', line[2]); tSub.textContent = line[1];
-    // test: only the program name in the ◇'s lit tone, like the node header's DCC name
     if (nameColour && line[4]) {
       tTitle.textContent = cubPrefix(line[4]);
       const nm = document.createElementNS(NS, 'tspan'); nm.textContent = line[4]; nm.setAttribute('fill', line[5]);
@@ -316,9 +277,8 @@ function render(p) {
   }
   main.g.style.opacity = mainAlpha * introK;
   main.g.style.filter = flash > 0 ? `drop-shadow(0 0 ${14 * flash}px rgba(240,255,65,${0.55 * flash}))` : '';
-  main.draw(cx, cy, a, b, sw, cols, drawnD, erasedD);   // on load it draws from its bottom point
+  main.draw(cx, cy, a, b, sw, cols, drawnD, erasedD);
 
-  // the letters
   const left = cx - a - gap;
   tCub.setAttribute('x', left); tCub.setAttribute('y', baseY);
   tHyper.setAttribute('x', left - tCub.getComputedTextLength() - 3); tHyper.setAttribute('y', baseY);
@@ -329,11 +289,9 @@ function render(p) {
   gMir.style.opacity = (toMirror * letters).toFixed(3);
   tFr.setAttribute('x', cx + a + 6); tFr.setAttribute('y', baseY);
   tFr.style.opacity = END === 'lockup' ? e1.toFixed(3) : 0;
-  // the sync flash also runs a white wave out through the letters on both sides
   for (const t of [tCub, tMir]) t.setAttribute('fill', flash > 0 ? mixC('#e6e6e6', '#ffffff', flash) : '#e6e6e6');
   for (const t of [tCub, tMir]) t.style.filter = flash > 0 ? `drop-shadow(0 0 ${8 * flash}px rgba(255,255,255,${0.4 * flash}))` : '';
 
-  // ending "eight": the eight DCC diamonds fan out from the centre, one after another
   eight.forEach((o, i) => {
     const k = END === 'eight' ? seg(p, 0.18 + i * 0.025, 0.24 + i * 0.025) : 0;
     const x = lerp(500, 500 + (i - 3.5) * 112, k), y = CY - 10, r = lerp(capR, 30, k);
@@ -341,25 +299,17 @@ function render(p) {
     o.t.setAttribute('x', x); o.t.setAttribute('y', y + 58); o.t.style.opacity = k;
   });
 
-  // the buttons under the address
   document.getElementById('cta').style.opacity = END === 'lockup' ? e2 : 0;
 
-  // caption + rail
   let k = 0; STEPS.forEach((s, i) => { if (p >= s[0]) k = i; });
   document.getElementById('cap').textContent = k === STEPS.length - 1 ? ENDS[END].cap : STEPS[k][1];
   ticks.forEach((t, i) => { t.style.opacity = i === k ? 1 : i < k ? 0.55 : 0.22; t.style.transform = `scale(${i === k ? 1.15 : 1})`; });
   document.getElementById('hint').style.opacity = p < 0.02 ? 1 : 0;
 }
 
-// the wheel never leaves the logo: it moves the story's progress (0 -> 1), the page stays put.
-// The story only rests on whole moments ("stops"): HYPERCUB◇, the mirror, each DCC's ◇ fully
-// drawn with its line, the silver end - a logo is never left half drawn.
 let want = 0;
 const STOPS = [0, 0.12, ...FORKS.map((_, i) => D0 + (D1 - D0) * (i + 0.535) / 8), 1];
 const prog = () => want;
-// ONE notch = the next stop (user: "a bit slow showing all the viewport options"): HYPERCUB◇ ->
-// mirror -> Maya -> Blender … -> silver. A trackpad's stream of small deltas adds up to one step;
-// after a step the wheel rests 300 ms so one flick never skips a logo.
 let wheelAcc = 0, wheelRest = 0;
 const step = dir => {
   const i = STOPS.reduce((best, s, k) => Math.abs(s - want) < Math.abs(STOPS[best] - want) ? k : best, 0);
@@ -374,10 +324,7 @@ addEventListener('wheel', e => {
   if (Math.abs(wheelAcc) >= 50) { step(Math.sign(wheelAcc)); wheelAcc = 0; wheelRest = now + 300; }
 }, { passive: false });
 
-// the product page behind the ◇ (a stand-in: the real page comes with the site)
 const page = document.getElementById('page');
-// the page's ◇: OUR geometry exactly (the DCC logo's: stroke 0.164 of the height, halves run
-// past the tips and are clipped to the contour), not a hand-drawn copy
 let diaIds = 0;
 const smallDia = (hex, px = 46) => {
   const id = 'pc' + diaIds++;
@@ -389,7 +336,6 @@ const smallDia = (hex, px = 46) => {
   return `<svg width="${px}" height="${px}" viewBox="0 0 46 46" fill="none"><defs><clipPath id="${id}"><polygon points="${c},${c - a} ${c + a},${c} ${c},${c + a} ${c - a},${c}"/></clipPath></defs>`
     + `<g clip-path="url(#${id})" stroke-width="${sw.toFixed(2)}" stroke-linejoin="miter"><polyline points="${half(L)}" stroke="${d}"/><polyline points="${half(R)}" stroke="${l}"/></g></svg>`;
 };
-// the background film: on/off, how dark the scrim is, and a dropped file replaces it (test only)
 const bgv = document.getElementById('bgv'), scrim = document.getElementById('scrim');
 document.querySelectorAll('#bgopts button').forEach(b => b.onclick = () => {
   const k = b.dataset.bg ? 'bg' : 'sc';
@@ -397,7 +343,6 @@ document.querySelectorAll('#bgopts button').forEach(b => b.onclick = () => {
   if (k === 'bg') { bgv.style.opacity = b.dataset.bg === 'video' ? 1 : 0; b.dataset.bg === 'video' ? bgv.play() : bgv.pause(); }
   else scrim.style.setProperty('--sc', b.dataset.sc);
 });
-// phones can refuse autoplay (low power / data saver): start the film on the first touch
 ['touchend', 'click'].forEach(e => addEventListener(e, () => { if (bgv.paused && bgv.style.opacity !== '0') bgv.play().catch(() => {}); }));
 document.querySelectorAll('#nameopts button').forEach(b => b.onclick = () => {
   nameColour = b.dataset.nc === '1';
@@ -411,7 +356,6 @@ addEventListener('drop', e => {
 });
 rail.innerHTML = STEPS.map(() => `<span class="tick">${smallDia(null, 14)}</span>`).join('');
 ticks = [...rail.children];
-// the scroll cue is a small silver ◇ too (no arrow, user 10-14)
 document.getElementById('hint').innerHTML = `scroll <span class="cue">${smallDia(null, 12)}</span>`;
 function fillPage(prod) {
   const all = prod.name === 'all';
@@ -422,10 +366,8 @@ function fillPage(prod) {
        ['CUB◇ GLTF importers', 'glTF models into Maya, Blender, Houdini, 3ds Max and Cinema 4D: CUB◇ GLTF for each.']]
     : [['Live sync', `Work in ${prod.name}; the scene follows in ComfyUI.`], ['FX', 'Smoke, liquids, splats, lights - added in the viewer.'],
        ['Render passes', 'Depth, normals, edges and more, frame by frame.'], ['Send to AI', 'Feed the passes to image and video models.']];
-  // the film: the program's own promo where we have one, else the placeholder clip
   const promo = PROMOS[prod.name] ? PROMO_HOST + PROMOS[prod.name] : bgv.currentSrc;
   const file = promo.split('/').pop();
-  // no arrow: the ◇ you came in through is the way back out (user 10-14)
   page.innerHTML = `<div class="hero"><video autoplay muted loop playsinline src="${promo}"></video><div class="shade"></div>
       <button class="ret" id="ret"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 8H3M7.5 3.5 3 8l4.5 4.5"/></svg>back</button>
       <div class="tag" id="ptag"></div>
@@ -434,7 +376,6 @@ function fillPage(prod) {
         <div class="cta">${prod.name === 'Babylon' ? '<span class="main">open source</span>' : '<span class="main">buy</span>'}</div></div></div>
     <div class="feats">${tiles.map(([b, s], i) => `<button class="feat${i ? '' : ' on'}" data-i="${i}"><div class="thumb">image</div><div><b>${b}</b><span>${s}</span></div></button>`).join('')}</div>`;
   page.style.setProperty('--acc', all ? LIT : tones(prod.hex)[1]);
-  // placeholder: a feature click names the clip that will play above it
   const tag = document.getElementById('ptag');
   const pick = i => {
     page.querySelectorAll('.feat').forEach((f, k) => f.classList.toggle('on', k === i));
@@ -442,38 +383,31 @@ function fillPage(prod) {
   };
   page.querySelectorAll('.feat').forEach(f => f.onclick = () => pick(+f.dataset.i));
   pick(0);
-  // the ◇ was the only way out and nobody found it (user 10-28): a plain "back" arrow too
   document.getElementById('back').onclick = goBack;
   document.getElementById('ret').onclick = goBack;
 }
-// a product page is a history step, so the phone's back gesture (and the browser's back) closes it;
-// our own back buttons go through history too, so the step is used up either way
 const enter = prod => { diveTo = prod; fillPage(prod); diveDir = 1; history.pushState({ product: prod.name }, ''); };
 const leave = () => { diveDir = -1; page.querySelector('video').pause(); };
 const goBack = () => history.state && history.state.product ? history.back() : leave();
 addEventListener('popstate', () => { if (dive > 0 || diveDir > 0) leave(); });
-// per-DCC promo films (C:\Project\Videos_promo, served on 8800 for the mockup); the rest use the placeholder
 const PROMO_HOST = 'films/';
 const PROMOS = { 'Maya': 'Maya_promo.mp4', 'Blender': 'Blender_promo.mp4', 'Houdini': 'Houdini_promo.mp4', '3ds Max': '3Dsmax_promo.mp4', 'Cinema 4D': 'cinema4d_promo.mp4' };
 document.getElementById('s').addEventListener('click', () => {
   if (!enterable || dive > 0) return;
   enter(enterable);
 });
-// a finger cannot hover: the menu button and "products" open on a tap, a tap elsewhere closes them
 const bar = document.querySelector('.bar'), menu = document.querySelector('.menu');
 document.getElementById('burger').onclick = e => { e.stopPropagation(); bar.classList.toggle('open'); };
 menu.addEventListener('click', e => { e.stopPropagation(); menu.classList.toggle('open'); });
 addEventListener('click', () => { bar.classList.remove('open'); menu.classList.remove('open'); });
 let touchY = null;
 addEventListener('touchstart', e => { touchY = e.touches[0].clientY; }, { passive: true });
-// a swipe of 60 px is one step; keys step too (Home / End jump to the ends)
 addEventListener('touchmove', e => {
   if (touchY === null || dive > 0) return; e.preventDefault();
   const dy = touchY - e.touches[0].clientY;
   if (Math.abs(dy) >= 60) { step(Math.sign(dy)); touchY = e.touches[0].clientY; }
 }, { passive: false });
 addEventListener('keydown', e => {
-  // Enter goes in through the ◇ on show, Esc comes back out
   if (e.key === 'Escape' && dive === 1) { document.getElementById('back').click(); return; }
   if (dive > 0) return;
   if (e.key === 'Enter' && enterable) { e.preventDefault(); enter(enterable); return; }
@@ -482,8 +416,6 @@ addEventListener('keydown', e => {
   if (e.key === 'Home') { e.preventDefault(); want = 0; }
   if (e.key === 'End') { e.preventDefault(); want = 1; }
 });
-// smooth: the drawing glides toward the scroll position every frame instead of jumping with each
-// wheel step (a wheel notch moves ~100 px at once)
 let cur = prog();
 const onScroll = () => render(cur);
 
@@ -493,10 +425,7 @@ for (const [key, e] of Object.entries(ENDS)) {
   b.onclick = () => { END = key; [...ends.children].forEach(x => x.classList.toggle('on', x === b)); onScroll(); };
   ends.appendChild(b);
 }
-// every move between stops is a timed, eased tween (not tied to the wheel's speed): longer moves
-// take longer - the mirror -> Maya move ~1.8 s, one DCC to the next ~1.3 s
 let tw = { from: 0, to: 0, t0: 0, dur: 1 }, arrived = 0;
-// it waits while the pointer is on the ◇ (to click it); the wheel / a swipe still skips ahead or goes back
 const HOLD = 2100;
 let overDia = false;
 const svgEl = document.getElementById('s');
@@ -506,10 +435,9 @@ let t0 = null;
 (function frame(t) {
   if (t0 === null) t0 = t;
   introK = Math.min(1, (t - t0) / 1600);
-  // the dive runs on its own clock (0.9 s in, 0.7 s back out); the page shows once we are through
   if (diveDir) {
     dive = clamp01(dive + diveDir * (diveDir > 0 ? 1 / 54 : 1 / 42));
-    if (dive === 0) arrived = t;                          // back out: the same ◇ holds again
+    if (dive === 0) arrived = t;
     if (dive === 0 || dive === 1) diveDir = 0;
   }
   page.hidden = dive < 0.6;
@@ -518,9 +446,7 @@ let t0 = null;
   if (target !== tw.to) tw = { from: cur, to: target, t0: t, dur: Math.min(2000, 400 + Math.abs(target - cur) * 9500) };
   const k = clamp01((t - tw.t0) / tw.dur);
   cur = lerp(tw.from, tw.to, ease(k));
-  if (k >= 1 && arrived < tw.t0) arrived = t;              // when this move finished
-  // one touch starts it (user 10-14 "people like to touch"): from the mirror on it plays by itself -
-  // the mirror holds a little longer, then each ◇ holds and the next draws
+  if (k >= 1 && arrived < tw.t0) arrived = t;
   const playing = want >= STOPS[1] - 1e-6 && want < 1;
   const hold = want < STOPS[2] - 1e-6 ? HOLD + 600 : HOLD;
   if (playing && k >= 1 && dive === 0 && !overDia && t - arrived > hold) step(1);

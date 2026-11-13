@@ -288,11 +288,11 @@ function makeDia(parent = svg) {
 const main = makeDia();
 
 const F = 92, CAP = F * 0.7;
-const SZ = PHONE ? { ttl: 36, tsb: 24, tag: 23, btn: 22, btnH: 72, btnPad: 84, halo: 6 } : { ttl: 30, tsb: 18, tag: 21, btn: 13, btnH: 40, btnPad: 48, halo: 4 };
+const SZ = PHONE ? { ttl: 36, tsb: 24, tag: 23, btn: 22, btnH: 72, btnPad: 84 } : { ttl: 30, tsb: 18, tag: 21, btn: 13, btnH: 40, btnPad: 48 };
 const GAP = PHONE ? [64, 108, 188] : [70, 102, 152];
 const BIG = PHONE ? 115 : 100, LIFT = PHONE ? 110 : 60;
 const fontAttrs = { 'font-family': 'system-ui, -apple-system, "Segoe UI", sans-serif', 'font-weight': 600, 'font-size': F, 'letter-spacing': '3', fill: '#e6e6e6' };
-const lineAttrs = { ...fontAttrs, 'font-weight': 400, fill: SOFT, 'text-anchor': 'middle', 'letter-spacing': '0.5', stroke: '#131417', 'stroke-opacity': 0.5, 'stroke-width': SZ.halo, 'stroke-linejoin': 'round', 'paint-order': 'stroke' };
+const lineAttrs = { ...fontAttrs, 'font-weight': 400, fill: SOFT, 'text-anchor': 'middle', 'letter-spacing': '0.5' };
 const tHyper = mk('text', { ...fontAttrs, 'text-anchor': 'end' }); tHyper.textContent = 'HYPER';
 const tCub = mk('text', { ...fontAttrs, 'text-anchor': 'end' }); tCub.textContent = 'CUB';
 const tFr = mk('text', { ...fontAttrs, 'font-weight': 400, fill: '#8c9199', 'text-anchor': 'start' }); tFr.textContent = '.fr';

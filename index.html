@@ -4,44 +4,68 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>hypercubo.fr — the ◇ is the flow (test)</title>
+<meta name="theme-color" content="#131417">
+<title>HYPERCUB◇ — your 3D scene, live in ComfyUI</title>
+<meta name="description" content="CUB◇: ComfyUI nodes that put your Maya, Blender, Houdini, 3ds Max, Cinema 4D, Cascadeur or ZBrush scene live in ComfyUI, and glTF importers for your 3D program.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://hypercubo.fr/">
+<meta property="og:title" content="HYPERCUB◇ — your 3D scene, live in ComfyUI">
+<meta property="og:description" content="ComfyUI nodes for seven 3D programs, a free open-source edition, and glTF importers.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23131417'/%3E%3Cpath d='M16 6 6 16l10 10' fill='none' stroke='%23686e77' stroke-width='4.5'/%3E%3Cpath d='M16 6l10 10-10 10' fill='none' stroke='%23aab0b8' stroke-width='4.5'/%3E%3C/svg%3E">
 <style>
-  :root { --bg:#131417; --fg:#e6e6e6; --dim:#8c9199; --line:#2a2c31; --shade:#686e77; --lit:#aab0b8; }
+  :root { --bg:#131417; --fg:#e6e6e6; --dim:#8c9199; --soft:#b4b8bf; --line:#2a2c31; --shade:#686e77; --lit:#aab0b8; color-scheme:dark; }
   * { box-sizing:border-box; }
   * { -webkit-tap-highlight-color:transparent; }
   :focus:not(:focus-visible) { outline:none; }
+  a { color:inherit; text-decoration:none; }
   html, body { margin:0; height:100%; overflow:hidden; background:var(--bg); color:var(--fg); font:15px/1.5 system-ui, -apple-system, 'Segoe UI', sans-serif; }
   .bar { position:fixed; top:0; left:0; right:0; height:48px; display:flex; align-items:center; justify-content:space-between; padding:0 22px; background:rgba(10,10,12,.92); border-bottom:1px solid var(--line); z-index:5; font:600 12px system-ui, sans-serif; letter-spacing:.12em; text-transform:uppercase; }
-  .bar nav { display:flex; gap:22px; color:#cfd2d7; }
+  .bar nav { display:flex; align-items:center; gap:22px; color:#cfd2d7; }
   .bar .brand { letter-spacing:.04em; font-size:15px; }
-  .bar nav > span { cursor:default; }
+  .bar nav > a, .menu .top { cursor:pointer; transition:color .15s; }
+  .bar nav > a:hover, .menu:hover .top, .menu .top:hover { color:#fff; }
   .menu { position:relative; }
-  .menu .drop { display:none; position:absolute; top:calc(100% + 14px); left:-14px; min-width:300px; background:#17181b; border:1px solid var(--line); padding:6px 0; text-transform:none; letter-spacing:0; }
+  .menu .top { background:none; border:0; padding:0; font:inherit; letter-spacing:inherit; text-transform:inherit; color:inherit; }
+  .menu .drop { display:none; position:absolute; top:calc(100% + 14px); left:-14px; min-width:320px; background:#17181b; border:1px solid var(--line); padding:6px 0; text-transform:none; letter-spacing:0; }
   .menu:hover .drop, .menu:focus-within .drop, .menu.open .drop { display:block; }
   .menu .drop::before { content:''; position:absolute; left:0; right:0; top:-16px; height:16px; }
   .menu .item { display:flex; flex-direction:column; gap:2px; padding:9px 14px; }
-  .menu .item:hover { background:#202126; }
+  .menu .item:hover, .menu .prog:hover { background:#202126; }
   .menu .item b { font:600 13px system-ui, sans-serif; color:#e6e6e6; }
   .menu .item small { font:12px system-ui, sans-serif; color:var(--dim); }
+  .menu .progs { display:grid; grid-template-columns:1fr 1fr; padding:0 0 6px; margin-bottom:6px; border-bottom:1px solid var(--line); }
+  .menu .prog { display:flex; align-items:center; gap:9px; padding:7px 14px; font:13px system-ui, sans-serif; color:#cfd2d7; }
+  .navfoot { display:none; }
   #bgv { position:fixed; inset:0; width:100%; height:100%; object-fit:cover; transition:opacity .6s; }
   #scrim { position:fixed; inset:0; background:radial-gradient(ellipse 70% 60% at 50% 50%, rgba(19,20,23,var(--sc)) 0%, rgba(19,20,23,calc(var(--sc) * .6 + .3)) 100%); --sc:.6; }
   #story { position:fixed; inset:0; }
   .stage { position:absolute; inset:0; overflow:hidden; display:flex; align-items:center; justify-content:center; }
-  #s { width:min(1100px, 100vw); height:auto; max-height:86vh; overflow:visible; }
-  .caption { position:absolute; left:0; right:0; bottom:9vh; text-align:center; font:13px 'JetBrains Mono', Consolas, monospace; letter-spacing:.08em; color:var(--dim); }
-  .rail { position:absolute; left:18px; top:50%; transform:translateY(-50%); display:flex; flex-direction:column; gap:14px; padding:12px 8px; background:rgba(19,20,23,.55); backdrop-filter:blur(6px); }
-  .rail .tick { display:flex; transition:opacity .4s, transform .4s; }
+  #s { flex:0 0 auto; width:min(1100px, 100vw); height:auto; max-height:86vh; overflow:visible; }
+  #s .go { cursor:pointer; transition:opacity .3s; }
+  #s .go rect { fill:rgba(19,20,23,.72); transition:fill .2s; }
+  #s .go:hover rect { fill:rgba(48,50,56,.9); }
+  .caption { position:absolute; left:0; right:0; bottom:9vh; text-align:center; font:13px 'JetBrains Mono', Consolas, monospace; letter-spacing:.08em; color:var(--soft); }
+  .rail { position:absolute; left:18px; top:50%; transform:translateY(-50%); display:flex; flex-direction:column; padding:6px 0; background:rgba(19,20,23,.55); backdrop-filter:blur(6px); }
+  .rail .tick { display:flex; padding:6px 10px; background:none; border:0; cursor:pointer; opacity:.45; transition:opacity .3s, transform .3s; }
+  .rail .tick:hover { opacity:1; }
+  .rail .tick.on { opacity:1; transform:scale(1.3); }
   .rail svg { display:block; }
-  .hint { position:absolute; bottom:3vh; left:50%; transform:translateX(-50%); display:flex; align-items:center; gap:6px; font:11px 'JetBrains Mono', Consolas, monospace; color:var(--dim); }
+  .hint { position:absolute; bottom:3vh; left:50%; transform:translateX(-50%); display:flex; align-items:center; gap:6px; font:12px 'JetBrains Mono', Consolas, monospace; color:var(--soft); transition:opacity .3s; }
   .hint .cue { display:flex; animation:cue 1.8s ease-in-out infinite; }
   @keyframes cue { 0%, 100% { transform:translateY(-1px); } 50% { transform:translateY(3px); } }
+  @media (prefers-reduced-motion: reduce) { .hint .cue { animation:none; } }
   .cta { position:absolute; left:0; right:0; top:62%; display:flex; justify-content:center; gap:12px; pointer-events:none; }
   .cta span { font:600 12px system-ui, sans-serif; letter-spacing:.12em; text-transform:uppercase; padding:10px 18px; border:1px solid #3a3d43; color:#e6e6e6; background:#1b1c20; }
   .cta span.main { background:#e6e6e6; color:#131417; border-color:#e6e6e6; }
-  .after { min-height:60vh; display:flex; align-items:center; justify-content:center; border-top:1px solid var(--line); color:var(--dim); font:13px 'JetBrains Mono', Consolas, monospace; }
+  .cta span.soon { background:rgba(19,20,23,.65); color:var(--soft); }
   .stage.can-enter #s { cursor:pointer; }
+  .foot { display:flex; flex-wrap:wrap; align-items:center; gap:4px 16px; font:12px system-ui, sans-serif; color:var(--dim); }
+  .foot a:hover { color:#e6e6e6; }
+  .foot.home { position:fixed; right:18px; bottom:12px; z-index:2; color:var(--soft); }
   .page { position:fixed; inset:48px 0 0 0; background:var(--bg); overflow:hidden; z-index:3; display:flex; flex-direction:column; }
-  .page[hidden] { display:none; }   
+  .page[hidden] { display:none; }
+  .page.scroll { overflow-y:auto; }
+  .page .foot { flex:0 0 auto; padding:9px max(16px, 5vw); border-top:1px solid var(--line); background:#101114; }
   .page .hero { position:relative; flex:1 1 auto; min-height:0; overflow:hidden; background:#0c0d0f; }
   .page .hero video { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
   .page .hero .shade { position:absolute; inset:0; background:linear-gradient(to top, rgba(19,20,23,.92) 0%, rgba(19,20,23,.35) 45%, rgba(19,20,23,0) 70%), linear-gradient(to right, rgba(19,20,23,.55), rgba(19,20,23,0) 60%); }
@@ -52,18 +76,34 @@
   .page .ret { position:absolute; left:max(16px, 5vw); top:16px; display:flex; align-items:center; gap:8px; padding:9px 16px 9px 12px; background:rgba(19,20,23,.65); border:1px solid #3a3d43; color:#e6e6e6; font:600 14px system-ui, sans-serif; letter-spacing:.04em; cursor:pointer; z-index:1; }
   .page .ret:hover { border-color:var(--lit); background:rgba(19,20,23,.85); }
   .page .head { display:flex; align-items:center; gap:16px; margin:0 0 6px; }
-  .page h1 { font:600 clamp(26px, 3.6vw, 46px) system-ui, sans-serif; margin:0; letter-spacing:.02em; }
-  .page .sub { color:#8c9199; font-size:16px; margin:0 0 16px; }
+  .page h1 { font:600 clamp(26px, 3.6vw, 46px) system-ui, sans-serif; margin:0; letter-spacing:.02em; color:var(--lit); }
+  .page .sub { color:var(--soft); font-size:16px; margin:0 0 16px; }
   .page .cta { position:static; display:flex; gap:12px; pointer-events:auto; justify-content:flex-start; }
   .page .feats { flex:0 0 auto; display:grid; grid-template-columns:repeat(4, 1fr); gap:1px; background:var(--line); border-top:1px solid var(--line); }
   .page .feat { display:flex; gap:12px; align-items:flex-start; padding:14px max(14px, 1.6vw); background:#141518; cursor:pointer; border-top:2px solid transparent; text-align:left; font:inherit; color:inherit; border-left:0; border-right:0; border-bottom:0; }
   .page .feat:hover { background:#191a1e; }
   .page .feat.on { border-top-color:var(--acc, #aab0b8); background:#191a1e; }
-  .page .feat .thumb { flex:0 0 auto; width:96px; aspect-ratio:16/9; background:repeating-linear-gradient(135deg, #1f2125 0 6px, #24262b 6px 12px); border:1px solid #2e3035; display:flex; align-items:center; justify-content:center; font:9px 'JetBrains Mono', Consolas, monospace; color:#686e77; }
+  .page .feat .thumb { display:none; flex:0 0 auto; width:96px; aspect-ratio:16/9; background:repeating-linear-gradient(135deg, #1f2125 0 6px, #24262b 6px 12px); border:1px solid #2e3035; align-items:center; justify-content:center; font:9px 'JetBrains Mono', Consolas, monospace; color:#686e77; }
+  .test .page .feat .thumb { display:flex; }
   .page .feat b { display:block; font:600 14px system-ui, sans-serif; color:#aab0b8; margin-bottom:3px; }
-  .page .feat span { color:#8c9199; font-size:12.5px; line-height:1.4; }
-  @media (max-width:820px) { .page .feats { grid-template-columns:repeat(2, 1fr); } .page .feat .thumb { display:none; } }
-  .note { position:fixed; right:18px; bottom:14px; max-width:330px; font:11px/1.5 system-ui, sans-serif; color:var(--dim); background:#1b1c20; border:1px solid var(--line); padding:10px 12px; z-index:5; }
+  .page .feat span { color:#9aa0a8; font-size:12.5px; line-height:1.4; }
+  .page .cards { flex:0 0 auto; display:grid; grid-template-columns:repeat(5, 1fr); gap:1px; background:var(--line); border-top:1px solid var(--line); }
+  .page .card { display:flex; gap:12px; align-items:center; padding:13px max(14px, 1.4vw); background:#141518; }
+  .page .card:hover { background:#1c1d22; }
+  .page .card.wide { grid-column:span 2; }
+  .page .card svg { flex:0 0 auto; }
+  .page .card b { display:block; font:600 14px system-ui, sans-serif; color:#cfd2d7; margin-bottom:2px; }
+  .page .card span { color:#9aa0a8; font-size:12.5px; line-height:1.35; }
+  .doc { flex:1 0 auto; width:100%; max-width:720px; margin:0 auto; padding:28px 24px 48px; }
+  .page .doc .ret { position:static; display:inline-flex; margin:0 0 26px; }
+  .doc h1 { margin:0 0 18px; }
+  .doc h2 { font:600 16px system-ui, sans-serif; color:#cfd2d7; margin:30px 0 8px; }
+  .doc p { color:var(--soft); margin:0 0 12px; }
+  @media (max-width:1100px) { .page .cards { grid-template-columns:repeat(3, 1fr); } .page .card.wide { grid-column:auto; } }
+  @media (max-width:820px) { .page .feats { grid-template-columns:repeat(2, 1fr); } .test .page .feat .thumb { display:none; } }
+  @media (min-width:701px) { .menu.shut .drop { display:none; } }
+  .note { display:none; position:fixed; right:18px; bottom:44px; max-width:330px; font:11px/1.5 system-ui, sans-serif; color:var(--dim); background:#1b1c20; border:1px solid var(--line); padding:10px 12px; z-index:5; }
+  .test .note { display:block; }
   .note .ends { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
   .note button { font:11px 'JetBrains Mono', Consolas, monospace; background:#232428; color:#cfd2d7; border:1px solid var(--line); padding:5px 9px; cursor:pointer; }
   .note button.on { border-color:var(--lit); color:#fff; }
@@ -74,34 +114,42 @@
     .bar .brand { font-size:17px; }
     .burger { display:flex; gap:5px; padding:14px 8px; margin-right:-8px; }
     .burger i { width:24px; }
-    .bar nav { display:none; position:fixed; top:56px; left:0; right:0; flex-direction:column; gap:0; padding:4px 0 10px; background:#17181b; border-bottom:1px solid var(--line); font-size:16px; }
+    .bar nav { display:none; position:fixed; top:56px; left:0; right:0; max-height:calc(100dvh - 56px); overflow-y:auto; flex-direction:column; align-items:stretch; gap:0; padding:4px 0 10px; background:#17181b; border-bottom:1px solid var(--line); font-size:16px; }
     .bar.open nav { display:flex; }
-    .bar nav > span { padding:15px 20px; }
-    .menu .drop { display:block; position:static; min-width:0; border:0; padding:6px 0 0; background:none; }
+    .bar nav > a, .menu .top { padding:15px 20px; text-align:left; }
+    .menu .top { cursor:default; }
+    .menu .top .car { display:none; }
+    .menu .drop { display:block; position:static; min-width:0; border:0; padding:0 0 4px 20px; background:none; }
     .menu .drop::before { display:none; }
-    .menu .item { padding:10px 0 10px 14px; }
+    .menu .item { padding:10px 14px 10px 0; }
     .menu .item b { font-size:16px; }
     .menu .item small { font-size:14px; }
-    .page { inset:56px 0 0 0; }
-    .note { display:none; }
-    .page { overflow-y:auto; }
+    .menu .progs { border-bottom:0; margin-bottom:0; padding:0; }
+    .menu .prog { padding:12px 0; font-size:16px; }
+    .navfoot { display:flex; flex-wrap:wrap; gap:6px 18px; margin-top:6px; padding:14px 20px 4px; border-top:1px solid var(--line); font:13px system-ui, sans-serif; letter-spacing:0; text-transform:none; color:var(--dim); }
+    .foot.home { display:none; }
+    #s { width:150vw; }
+    .rail { left:50%; top:auto; bottom:14px; transform:translateX(-50%); flex-direction:row; padding:0; }
+    .rail .tick { padding:13px; }
+    .hint { bottom:76px; font-size:13px; }
+    .caption { bottom:120px; }
+    .page { inset:56px 0 0 0; overflow-y:auto; }
+    .test .note { display:none; }
     .page .hero { flex:0 0 auto; height:62vh; }
-    .page .feats { grid-template-columns:1fr; }
+    .page.list .hero { height:44vh; }
+    .page .feats, .page .cards { grid-template-columns:1fr; }
     .page .sub { font-size:14px; }
     .page .hero .tag { display:none; }
-    #s .ttl { font-size:54px; } #s .tsb { font-size:34px; } #s .ten { font-size:26px; }
   }
 </style>
 </head>
 <body>
-<div class="bar"><span class="brand" id="brand"></span><nav>
-  <span class="menu" tabindex="0">products ▾
-    <span class="drop">
-      <span class="item"><b>CUB◇ nodes</b><small>ComfyUI nodes: your DCC scene live in ComfyUI</small></span>
-      <span class="item"><b>CUB◇ GLTF importers</b><small>glTF models into Maya, Blender, Houdini, 3ds Max, Cinema 4D</small></span>
-    </span>
-  </span>
-  <span>gallery</span><span>docs</span><span>about</span><span>buy</span></nav>
+<div class="bar"><a class="brand" id="brand" href="#" aria-label="HYPERCUB◇ home"></a><nav>
+  <div class="menu" id="menu"><button class="top" id="menuBtn">products <span class="car">▾</span></button>
+    <div class="drop" id="drop"></div>
+  </div>
+  <a href="#gallery">gallery</a><a href="#docs">docs</a><a href="#about">about</a><a href="#products">buy</a>
+  <div class="navfoot"><a href="#legal">legal notice</a><a href="#terms">terms of sale</a><a href="#privacy">privacy</a></div></nav>
   <button class="burger" id="burger" aria-label="menu"><i></i><i></i><i></i></button></div>
 
 <video id="bgv" autoplay muted loop playsinline>
@@ -117,6 +165,7 @@
     <div class="hint" id="hint"></div>
   </div>
 </div>
+<div class="foot home"><span>© 2026 Victor Silva</span><a href="#legal">legal notice</a><a href="#terms">terms of sale</a><a href="#privacy">privacy</a></div>
 <div class="page" id="page" hidden></div>
 <div class="note"><b style="color:#cfd2d7">Test:</b> the ◇ is the page's flow: HYPERCUB◇ → the mirror → the ending (no cube at the start). Pick an ending, then scroll to the end:
   <div class="ends" id="ends"></div>
@@ -130,9 +179,15 @@
 
 <script>
 const NS = 'http://www.w3.org/2000/svg';
-const SHADE = '#686e77', LIT = '#aab0b8', MUTE = '#3a3d43', YEL = '#f0ff41';
+const SHADE = '#686e77', LIT = '#aab0b8', SOFT = '#cfd2d7', YEL = '#f0ff41';
+const TEST = new URLSearchParams(location.search).has('test');
+const PHONE = matchMedia('(max-width:700px)').matches;
+const CALM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+document.body.classList.toggle('test', TEST);
+
 const FORKS = [['Maya', '#38a5cc'], ['Blender', '#ea7600'], ['Houdini', '#ff6600'], ['3ds Max', '#399094'],
                ['Cinema 4D', '#2b2ca3'], ['Cascadeur', '#0092df'], ['ZBrush', '#b0a595'], ['Babylon', '#bb464b']];
+const slug = name => name.toLowerCase().replace(/ /g, '');
 const cubPrefix = name => name === 'Babylon' ? 'CUB◇ ' : 'CUB◇ for ';
 const tones = hex => [0, 255].map(to => '#' + [1, 3, 5].map(i => Math.round(parseInt(hex.slice(i, i + 2), 16) * 0.7 + to * 0.3).toString(16).padStart(2, '0')).join(''));
 const mixC = (a, b, t) => '#' + [1, 3, 5].map(i => Math.round(parseInt(a.slice(i, i + 2), 16) * (1 - t) + parseInt(b.slice(i, i + 2), 16) * t).toString(16).padStart(2, '0')).join('');
@@ -142,7 +197,7 @@ const seg = (p, a, b) => ease((p - a) / (b - a));
 const lerp = (a, b, t) => a + (b - a) * t;
 
 const ENDS = {
-  colours: { label: 'colours + products', cap: 'one ◇ for every 3D program' },
+  colours: { label: 'colours + products', cap: '' },
   lockup: { label: 'the address', cap: 'hypercubo.fr' },
   eight:  { label: 'eight ◇', cap: 'one ◇ for every 3D program' },
   sync:   { label: 'the sync flash', cap: 'in sync' },
@@ -154,12 +209,48 @@ const PRODUCT_LINES = {
   'Cinema 4D': 'your Cinema 4D scene, live in ComfyUI', 'Cascadeur': 'your Cascadeur animation, live in ComfyUI',
   'ZBrush': 'your sculpt, straight into ComfyUI', 'Babylon': 'the free, open-source edition',
 };
+const GLTF_LINE = 'glTF models into Maya, Blender, Houdini, 3ds Max and Cinema 4D';
+const PASSES = ['Render passes', 'Depth, normals, edges and more, frame by frame.'];
+const TO_AI = ['Send to AI', 'Feed the passes to image and video models.'];
+const TILES = {
+  'Cascadeur': [['Live sync', 'Animate in Cascadeur; the scene follows in ComfyUI.'], ['Animation', 'Characters, their animation and the camera come across.'], PASSES, TO_AI],
+  'ZBrush': [['GoZ', 'Press GoZ in ZBrush; your SubTools arrive in ComfyUI.'], ['Light and shade', 'HDRI lighting and a material gallery, in the viewer.'],
+             ['Camera', 'Keyframe the camera, or use a turntable.'], ['Send to AI', 'Feed frames and sequences to image and video models.']],
+  'Babylon': [['Free', 'Open source, MIT licence. No 3D program needed.'], ['Scene sync', 'Sync a scene from the Babylon.js Sandbox into ComfyUI.'],
+              ['Render passes', 'Colour, depth and normals, for a frame or a range.'], ['FX Script', 'A live script editor with 26 effect presets.']],
+  'gltf': [['Model libraries', 'Search Sketchfab, Poly Pizza and Polyfork from a panel in your 3D program.'], ['Materials', 'PBR materials come in with their textures.'],
+           ['Rigs and animation', 'Skinned characters come in with their animation.'], ['Your files', 'Import .glb and .gltf files from disk.']],
+};
+const tilesFor = name => TILES[name] || [['Live sync', `Work in ${name}; the scene follows in ComfyUI.`], ['FX', 'Smoke, liquids, splats and lights, added in the viewer.'], PASSES, TO_AI];
+const PROMOS = { 'Maya': 'Maya_promo.mp4', 'Blender': 'Blender_promo.mp4', 'Houdini': 'Houdini_promo.mp4', '3ds Max': '3Dsmax_promo.mp4', 'Cinema 4D': 'cinema4d_promo.mp4' };
 
-const STEPS = [
-  [0.00, 'hypercubo.fr'],
-  [0.03, 'one scene, two sides: the family'],
-  [0.15, ''],
-];
+const PAGES = {
+  products: { title: 'Products', sub: 'ComfyUI nodes for seven 3D programs, a free open-source edition, and glTF importers for five.' },
+  gltf: { title: 'CUB◇ GLTF importers', sub: GLTF_LINE + '.', tiles: TILES.gltf },
+  gallery: { title: 'Gallery', body: '<p>Images and films made with CUB◇ arrive with the release.</p>' },
+  docs: { title: 'Docs', body: '<p>Every CUB◇ pack includes its manual.</p><p>The online manuals arrive with the release.</p>' },
+  about: { title: 'About', body:
+    '<p>HYPERCUB◇ makes CUB◇: ComfyUI nodes that put your 3D scene live in ComfyUI, and glTF importers for your 3D program.</p>'
+    + '<p>Work in Maya, Blender, Houdini, 3ds Max, Cinema 4D, Cascadeur or ZBrush. The scene follows in a viewer inside ComfyUI, where you light it, add effects, render passes and send them to image and video models.</p>'
+    + '<p>The nodes run on your computer. CUB◇ Babylon is the free, open-source edition.</p>'
+    + '<p>CUB◇ is made by Victor Silva.</p>'
+    + '<h2>Trademarks</h2>'
+    + '<p>Autodesk, Maya and 3ds Max are registered trademarks or trademarks of Autodesk, Inc., and/or its subsidiaries and/or affiliates in the USA and/or other countries. Houdini is a trademark of Side Effects Software Inc. Cinema 4D, ZBrush and GoZ are trademarks or registered trademarks of Maxon Computer GmbH and/or its affiliates. Blender is a trademark of the Blender Foundation. Cascadeur is a trademark of Nekki Limited. ComfyUI is a project of Comfy Org. Babylon.js is a project of Microsoft. Sketchfab, Poly Pizza and all other product and company names belong to their respective owners.</p>'
+    + '<p>These names are used only to say what CUB◇ works with. HYPERCUB◇ and CUB◇ are not affiliated with, sponsored by or endorsed by any of these companies or projects.</p>' },
+  legal: { title: 'Legal notice', body:
+    '<p>Publisher: Victor Silva.</p>'
+    + '<p>Hosting: GitHub Pages, GitHub, Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, USA.</p>'
+    + '<p>The contact and business details will be added here before the store opens.</p>' },
+  terms: { title: 'Terms of sale', body:
+    '<p>The store is not open yet. The terms of sale will be published here before the first sale.</p>'
+    + '<p>Each product comes with its licence in the download.</p>' },
+  privacy: { title: 'Privacy', body:
+    '<p>This site sets no cookies and uses no analytics or trackers.</p>'
+    + '<p>It is hosted on GitHub Pages. GitHub may log technical data, such as your IP address, to serve the pages.</p>'
+    + '<p>The CUB◇ nodes run on your computer and send nothing to us.</p>' },
+};
+FORKS.forEach(([name, hex], i) => { PAGES[slug(name)] = { name, hex, i, sub: PRODUCT_LINES[name] + '.', tiles: tilesFor(name) }; });
+
 const D0 = 0.22, D1 = 0.92;
 let nameColour = true;
 
@@ -197,30 +288,37 @@ function makeDia(parent = svg) {
 const main = makeDia();
 
 const F = 92, CAP = F * 0.7;
+const SZ = PHONE ? { ttl: 36, tsb: 24, tag: 23, btn: 22, btnH: 72, btnPad: 84, halo: 6 } : { ttl: 30, tsb: 18, tag: 21, btn: 13, btnH: 40, btnPad: 48, halo: 4 };
+const GAP = PHONE ? [64, 108, 188] : [70, 102, 152];
+const BIG = PHONE ? 115 : 100, LIFT = PHONE ? 110 : 60;
 const fontAttrs = { 'font-family': 'system-ui, -apple-system, "Segoe UI", sans-serif', 'font-weight': 600, 'font-size': F, 'letter-spacing': '3', fill: '#e6e6e6' };
+const lineAttrs = { ...fontAttrs, 'font-weight': 400, fill: SOFT, 'text-anchor': 'middle', 'letter-spacing': '0.5', stroke: '#131417', 'stroke-opacity': 0.5, 'stroke-width': SZ.halo, 'stroke-linejoin': 'round', 'paint-order': 'stroke' };
 const tHyper = mk('text', { ...fontAttrs, 'text-anchor': 'end' }); tHyper.textContent = 'HYPER';
 const tCub = mk('text', { ...fontAttrs, 'text-anchor': 'end' }); tCub.textContent = 'CUB';
 const tFr = mk('text', { ...fontAttrs, 'font-weight': 400, fill: '#8c9199', 'text-anchor': 'start' }); tFr.textContent = '.fr';
 const gMir = mk('g', {}); const tMir = mk('text', { ...fontAttrs, 'text-anchor': 'end' }, gMir); tMir.textContent = 'CUB';
+const tTag = mk('text', { ...lineAttrs, 'font-size': SZ.tag, x: 500 }); tTag.textContent = 'your 3D scene, live in ComfyUI';
+const tTwo = mk('text', { ...lineAttrs, 'font-size': SZ.tag, x: 500 }); tTwo.textContent = 'one scene, two sides: your 3D program and ComfyUI';
 
-const tTitle = mk('text', { ...fontAttrs, class: 'ttl', 'font-size': 30, 'text-anchor': 'middle', 'letter-spacing': '1' });
-const tSub = mk('text', { ...fontAttrs, class: 'tsb', 'font-size': 18, 'font-weight': 400, fill: SHADE, 'text-anchor': 'middle', 'letter-spacing': '0.5' });
-const tEnter = mk('text', { class: 'ten', 'font-family': '"JetBrains Mono", Consolas, monospace', 'font-size': 12, 'letter-spacing': '1.5', fill: '#8c9199', 'text-anchor': 'middle' });
-const PHONE = matchMedia('(max-width:700px)').matches;
-const GAP = PHONE ? [86, 140, 196] : [70, 102, 142];
-tEnter.textContent = PHONE ? 'tap the ◇ to enter' : 'click the ◇ to enter';
+const tTitle = mk('text', { ...fontAttrs, 'font-size': SZ.ttl, 'text-anchor': 'middle', 'letter-spacing': '1', x: 500 });
+const tSub = mk('text', { ...lineAttrs, 'font-size': SZ.tsb, x: 500 });
+const gBtn = mk('g', { class: 'go' });
+const rBtn = mk('rect', { height: SZ.btnH }, gBtn);
+const tBtn = mk('text', { ...fontAttrs, 'font-size': SZ.btn, 'letter-spacing': '2', 'text-anchor': 'middle', x: 500 }, gBtn);
+let btnLabel = '', btnW = 0;
 const eight = FORKS.map(([name, c]) => {
   const d = makeDia(); const t = mk('text', { 'font-family': 'system-ui, sans-serif', 'font-weight': 600, 'font-size': 15, 'text-anchor': 'middle', fill: c }); t.textContent = name;
   return { d, t, cols: tones(c) };
 });
 
-const rail = document.getElementById('rail');
-let ticks = [];
+const rail = document.getElementById('rail'), stage = document.querySelector('.stage');
+const capEl = document.getElementById('cap'), hintEl = document.getElementById('hint'), ctaEl = document.getElementById('cta');
+let ticks = [], railOn = -2;
 document.getElementById('brand').innerHTML = 'HYPERCUB<svg width="11" height="11" viewBox="0 0 14 14" style="margin-left:1px;vertical-align:-1px"><polygon points="7,1.6 12.4,7 7,12.4 1.6,7" fill="none" stroke="#aab0b8" stroke-width="2.4"/></svg>';
 
 let introK = 0;
 let enterable = null;
-let dive = 0, diveDir = 0, diveTo = null;
+let dive = 0, diveDir = 0;
 function render(p) {
   const drawnK = clamp01(introK / 0.5), letterK = clamp01((introK - 0.45) / 0.55);
   let toMirror = seg(p, 0.03, 0.10);
@@ -233,8 +331,8 @@ function render(p) {
   let a = capR, b = capR, sw = F * 0.115;
   const colEnd = END === 'colours';
   if (colEnd) {
-    const zoomK = seg(p, 0.15, 0.19), s = lerp(1, 100 / a, zoomK);
-    a *= s; b *= s; sw *= s; cy -= zoomK * 40;
+    const zoomK = seg(p, 0.15, 0.19), s = lerp(1, BIG / a, zoomK);
+    a *= s; b *= s; sw *= s; cy -= zoomK * LIFT;
   }
 
   let cols = [SHADE, LIT];
@@ -242,7 +340,7 @@ function render(p) {
   const flash = END === 'sync' ? Math.sin(Math.PI * clamp01((p - 0.17) / 0.1)) : 0;
   if (flash > 0) cols = [mixC(cols[0], YEL, flash * 0.85), mixC(cols[1], YEL, flash)];
   if (END === 'eight') { mainAlpha = 1 - e1; letters = 1 - e1; }
-  let drawnD = drawnK, erasedD = 0, line = null;
+  let drawnD = drawnK, erasedD = 0, line = null, on = -1;
   enterable = null;
   if (colEnd) {
     letters = 1 - seg(p, 0.15, 0.19);
@@ -250,20 +348,28 @@ function render(p) {
     const q = (p - D0) / (D1 - D0);
     if (q >= 0 && q < 1) {
       const i = Math.min(7, Math.floor(q * 8)), u = q * 8 - i, [name, hex] = FORKS[i];
+      on = i;
       cols = tones(hex); drawnD = seg(u, 0, 0.35); erasedD = seg(u, 0.72, 1);
       line = [cubPrefix(name) + name, PRODUCT_LINES[name], LIT, Math.min(drawnD, 1 - erasedD), name, cols[1]];
-      if (line[3] > 0.6) enterable = { name, hex };
+      if (line[3] > 0.6) enterable = { key: slug(name), label: 'open' };
     } else if (q >= 1) {
       drawnD = seg(p, 0.92, 0.97); erasedD = 0;
-      line = ['CUB◇ nodes · CUB◇ GLTF importers','one ◇ for every 3D program — hypercubo.fr', LIT, drawnD];
-      if (drawnD > 0.6) enterable = { name: 'all' };
+      line = ['CUB◇ nodes · CUB◇ GLTF importers', 'one ◇ for every 3D program', LIT, drawnD];
+      if (drawnD > 0.6) enterable = { key: 'products', label: 'see the products' };
     }
   }
+  const below = cy + a;
   const dv = ease(dive);
   if (dv > 0) { const s = lerp(1, 30, dv * dv); a *= s; b *= s; sw *= s; letters *= 1 - dv; if (line) line[3] *= 1 - dv; }
-  document.querySelector('.stage').classList.toggle('can-enter', !!enterable && dive === 0);
-  tEnter.style.opacity = enterable && dive === 0 ? 1 : 0;
-  tEnter.setAttribute('x', 500); tEnter.setAttribute('y', cy + a + GAP[2]);
+  const canEnter = !!enterable && dive === 0;
+  stage.classList.toggle('can-enter', canEnter);
+  gBtn.style.opacity = canEnter ? 1 : 0; gBtn.style.pointerEvents = canEnter ? 'auto' : 'none';
+  if (enterable && enterable.label !== btnLabel) {
+    btnLabel = enterable.label; tBtn.textContent = btnLabel.toUpperCase();
+    btnW = tBtn.getComputedTextLength() + SZ.btnPad;
+    rBtn.setAttribute('x', 500 - btnW / 2); rBtn.setAttribute('width', btnW);
+  }
+  rBtn.setAttribute('y', below + GAP[2] - SZ.btnH / 2); tBtn.setAttribute('y', below + GAP[2] + SZ.btn * 0.36);
   tTitle.style.opacity = line ? line[3] : 0; tSub.style.opacity = line ? line[3] : 0;
   if (line) {
     tTitle.setAttribute('fill', line[2]); tSub.textContent = line[1];
@@ -272,8 +378,8 @@ function render(p) {
       const nm = document.createElementNS(NS, 'tspan'); nm.textContent = line[4]; nm.setAttribute('fill', line[5]);
       tTitle.appendChild(nm);
     } else tTitle.textContent = line[0];
-    tTitle.setAttribute('x', 500); tTitle.setAttribute('y', cy + a + GAP[0]);
-    tSub.setAttribute('x', 500); tSub.setAttribute('y', cy + a + GAP[1]);
+    tTitle.setAttribute('y', cy + a + GAP[0]);
+    tSub.setAttribute('y', cy + a + GAP[1]);
   }
   main.g.style.opacity = mainAlpha * introK;
   main.g.style.filter = flash > 0 ? `drop-shadow(0 0 ${14 * flash}px rgba(240,255,65,${0.55 * flash}))` : '';
@@ -291,6 +397,9 @@ function render(p) {
   tFr.style.opacity = END === 'lockup' ? e1.toFixed(3) : 0;
   for (const t of [tCub, tMir]) t.setAttribute('fill', flash > 0 ? mixC('#e6e6e6', '#ffffff', flash) : '#e6e6e6');
   for (const t of [tCub, tMir]) t.style.filter = flash > 0 ? `drop-shadow(0 0 ${8 * flash}px rgba(255,255,255,${0.4 * flash}))` : '';
+  for (const t of [tTag, tTwo]) t.setAttribute('y', baseY + SZ.tag * 2.6);
+  tTag.style.opacity = (letterK * (1 - seg(p, 0.03, 0.06)) * letters).toFixed(3);
+  tTwo.style.opacity = (seg(p, 0.07, 0.10) * letters * (END === 'lockup' ? 1 - e1 : 1)).toFixed(3);
 
   eight.forEach((o, i) => {
     const k = END === 'eight' ? seg(p, 0.18 + i * 0.025, 0.24 + i * 0.025) : 0;
@@ -299,29 +408,30 @@ function render(p) {
     o.t.setAttribute('x', x); o.t.setAttribute('y', y + 58); o.t.style.opacity = k;
   });
 
-  document.getElementById('cta').style.opacity = END === 'lockup' ? e2 : 0;
-
-  let k = 0; STEPS.forEach((s, i) => { if (p >= s[0]) k = i; });
-  document.getElementById('cap').textContent = k === STEPS.length - 1 ? ENDS[END].cap : STEPS[k][1];
-  ticks.forEach((t, i) => { t.style.opacity = i === k ? 1 : i < k ? 0.55 : 0.22; t.style.transform = `scale(${i === k ? 1.15 : 1})`; });
-  document.getElementById('hint').style.opacity = p < 0.02 ? 1 : 0;
+  ctaEl.style.opacity = END === 'lockup' ? e2 : 0;
+  capEl.textContent = p >= 0.15 ? ENDS[END].cap : '';
+  if (on !== railOn) { railOn = on; ticks.forEach((t, i) => t.classList.toggle('on', i === on)); }
+  rail.style.visibility = colEnd ? 'visible' : 'hidden';
+  hintEl.style.opacity = p < 0.02 ? 1 : 0;
 }
 
-let want = 0;
+let want = 0, cur = 0, auto = !CALM;
+let tw = { from: 0, to: 0, t0: 0, dur: 1 }, arrived = 0;
 const STOPS = [0, 0.12, ...FORKS.map((_, i) => D0 + (D1 - D0) * (i + 0.535) / 8), 1];
-const prog = () => want;
+const setStory = p => { want = cur = p; tw = { from: p, to: p, t0: 0, dur: 1 }; };
 let wheelAcc = 0, wheelRest = 0;
 const step = dir => {
   const i = STOPS.reduce((best, s, k) => Math.abs(s - want) < Math.abs(STOPS[best] - want) ? k : best, 0);
   want = STOPS[Math.max(0, Math.min(STOPS.length - 1, i + dir))];
 };
+const userStep = dir => { auto = !CALM; step(dir); };
 addEventListener('wheel', e => {
-  if (dive > 0) return;
+  if (dive > 0 || e.target.closest('.bar')) return;
   e.preventDefault();
   const now = performance.now();
   if (now < wheelRest) return;
   wheelAcc += e.deltaY;
-  if (Math.abs(wheelAcc) >= 50) { step(Math.sign(wheelAcc)); wheelAcc = 0; wheelRest = now + 300; }
+  if (Math.abs(wheelAcc) >= 50) { userStep(Math.sign(wheelAcc)); wheelAcc = 0; wheelRest = now + 300; }
 }, { passive: false });
 
 const page = document.getElementById('page');
@@ -347,110 +457,158 @@ document.querySelectorAll('#bgopts button').forEach(b => b.onclick = () => {
 document.querySelectorAll('#nameopts button').forEach(b => b.onclick = () => {
   nameColour = b.dataset.nc === '1';
   document.querySelectorAll('#nameopts button').forEach(x => x.classList.toggle('on', x === b));
+  render(cur);
 });
-addEventListener('dragover', e => e.preventDefault());
-addEventListener('drop', e => {
-  e.preventDefault();
-  const f = [...e.dataTransfer.files].find(f => f.type.startsWith('video/'));
-  if (f) { bgv.src = URL.createObjectURL(f); bgv.play(); }
-});
-rail.innerHTML = STEPS.map(() => `<span class="tick">${smallDia(null, 14)}</span>`).join('');
+if (TEST) {
+  addEventListener('dragover', e => e.preventDefault());
+  addEventListener('drop', e => {
+    e.preventDefault();
+    const f = [...e.dataTransfer.files].find(f => f.type.startsWith('video/'));
+    if (f) { bgv.src = URL.createObjectURL(f); bgv.play(); }
+  });
+}
+rail.innerHTML = FORKS.map(([name, hex], i) => `<button class="tick" data-i="${i}" title="${cubPrefix(name)}${name}" aria-label="${cubPrefix(name)}${name}">${smallDia(hex, 14)}</button>`).join('');
 ticks = [...rail.children];
-document.getElementById('hint').innerHTML = `scroll <span class="cue">${smallDia(null, 12)}</span>`;
-function fillPage(prod) {
-  const all = prod.name === 'all';
-  const title = all ? 'Products' : cubPrefix(prod.name) + prod.name;
-  const sub = all ? 'ComfyUI nodes for eight 3D programs, and glTF importers for five.' : PRODUCT_LINES[prod.name] + '.';
-  const tiles = all
-    ? [['CUB◇ nodes', 'Your DCC scene live in ComfyUI: CUB◇ for Maya, Blender, Houdini, 3ds Max, Cinema 4D, Cascadeur, ZBrush, and CUB◇ Babylon.'],
-       ['CUB◇ GLTF importers', 'glTF models into Maya, Blender, Houdini, 3ds Max and Cinema 4D: CUB◇ GLTF for each.']]
-    : [['Live sync', `Work in ${prod.name}; the scene follows in ComfyUI.`], ['FX', 'Smoke, liquids, splats, lights - added in the viewer.'],
-       ['Render passes', 'Depth, normals, edges and more, frame by frame.'], ['Send to AI', 'Feed the passes to image and video models.']];
-  const promo = PROMOS[prod.name] ? PROMO_HOST + PROMOS[prod.name] : bgv.currentSrc;
-  const file = promo.split('/').pop();
-  page.innerHTML = `<div class="hero"><video autoplay muted loop playsinline src="${promo}"></video><div class="shade"></div>
-      <button class="ret" id="ret"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 8H3M7.5 3.5 3 8l4.5 4.5"/></svg>back</button>
-      <div class="tag" id="ptag"></div>
-      <div class="txt"><div class="head"><button class="back" id="back" title="back" aria-label="back">${smallDia(all ? null : prod.hex)}</button><h1 style="color:${LIT}">${title}</h1></div>
-        <p class="sub">${sub}</p>
-        <div class="cta">${prod.name === 'Babylon' ? '<span class="main">open source</span>' : '<span class="main">buy</span>'}</div></div></div>
-    <div class="feats">${tiles.map(([b, s], i) => `<button class="feat${i ? '' : ' on'}" data-i="${i}"><div class="thumb">image</div><div><b>${b}</b><span>${s}</span></div></button>`).join('')}</div>`;
-  page.style.setProperty('--acc', all ? LIT : tones(prod.hex)[1]);
-  const tag = document.getElementById('ptag');
-  const pick = i => {
-    page.querySelectorAll('.feat').forEach((f, k) => f.classList.toggle('on', k === i));
-    tag.textContent = `placeholder · ${tiles[i][0].toLowerCase()} clip · now ${file}`;
-  };
-  page.querySelectorAll('.feat').forEach(f => f.onclick = () => pick(+f.dataset.i));
-  pick(0);
-  document.getElementById('back').onclick = goBack;
+rail.addEventListener('click', e => {
+  const b = e.target.closest('.tick');
+  if (!b) return;
+  const i = +b.dataset.i;
+  auto = false; setStory(D0 + (D1 - D0) * i / 8); want = STOPS[2 + i];
+});
+hintEl.innerHTML = `${PHONE ? 'swipe up' : 'scroll'} <span class="cue">${smallDia(null, 12)}</span>`;
+document.getElementById('drop').innerHTML =
+  '<a class="item" href="#products"><b>CUB◇ nodes</b><small>Your 3D scene, live in ComfyUI. One node per program.</small></a>'
+  + `<div class="progs">${FORKS.map(([name, hex]) => `<a class="prog" href="#${slug(name)}">${smallDia(hex, 16)}${name}</a>`).join('')}</div>`
+  + `<a class="item" href="#gltf"><b>CUB◇ GLTF importers</b><small>${GLTF_LINE}</small></a>`;
+
+const RET = '<button class="ret" id="ret"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 8H3M7.5 3.5 3 8l4.5 4.5"/></svg>back</button>';
+const FOOT = '<div class="foot"><span>© 2026 Victor Silva</span><a href="#about">about</a><a href="#legal">legal notice</a><a href="#terms">terms of sale</a><a href="#privacy">privacy</a></div>';
+function fillPage(key, pg) {
+  const list = key === 'products';
+  page.className = 'page' + (pg.body ? ' scroll' : '') + (list ? ' list' : '');
+  if (pg.body) {
+    page.innerHTML = `<div class="doc">${RET}<h1>${pg.title}</h1>${pg.body}</div>${FOOT}`;
+  } else {
+    const lit = pg.hex ? tones(pg.hex)[1] : LIT;
+    const title = pg.name ? `${cubPrefix(pg.name)}<span style="color:${lit}">${pg.name}</span>` : pg.title;
+    const promo = PROMOS[pg.name] ? 'films/' + PROMOS[pg.name] : bgv.currentSrc || 'films/promo_placeholder.mp4';
+    const soon = list ? '' : `<div class="cta"><span class="soon">${pg.name === 'Babylon' ? 'free · open source' : 'available soon'}</span></div>`;
+    const grid = list
+      ? `<div class="cards">${FORKS.map(([name, hex]) => `<a class="card" href="#${slug(name)}">${smallDia(hex, 28)}<div><b>${cubPrefix(name)}${name}</b><span>${PRODUCT_LINES[name]}</span></div></a>`).join('')}`
+        + `<a class="card wide" href="#gltf">${smallDia(null, 28)}<div><b>CUB◇ GLTF importers</b><span>${GLTF_LINE}</span></div></a></div>`
+      : `<div class="feats">${pg.tiles.map(([b, s], i) => `<button class="feat${i ? '' : ' on'}" data-i="${i}"><div class="thumb">image</div><div><b>${b}</b><span>${s}</span></div></button>`).join('')}</div>`;
+    page.innerHTML = `<div class="hero"><video autoplay muted loop playsinline src="${promo}"></video><div class="shade"></div>${RET}
+      ${TEST ? '<div class="tag" id="ptag"></div>' : ''}
+      <div class="txt"><div class="head"><button class="back" id="back" title="back" aria-label="back">${smallDia(pg.hex)}</button><h1>${title}</h1></div>
+        <p class="sub">${pg.sub}</p>${soon}</div></div>${grid}${FOOT}`;
+    page.style.setProperty('--acc', lit);
+    const tag = document.getElementById('ptag');
+    const pick = i => {
+      page.querySelectorAll('.feat').forEach((f, k) => f.classList.toggle('on', k === i));
+      if (tag) tag.textContent = `placeholder · ${pg.tiles[i][0].toLowerCase()} clip · now ${promo.split('/').pop()}`;
+    };
+    page.querySelectorAll('.feat').forEach(f => f.onclick = () => pick(+f.dataset.i));
+    if (!list) pick(0);
+    document.getElementById('back').onclick = goBack;
+  }
   document.getElementById('ret').onclick = goBack;
 }
-const enter = prod => { diveTo = prod; fillPage(prod); diveDir = 1; history.pushState({ product: prod.name }, ''); };
-const leave = () => { diveDir = -1; page.querySelector('video').pause(); };
-const goBack = () => history.state && history.state.product ? history.back() : leave();
-addEventListener('popstate', () => { if (dive > 0 || diveDir > 0) leave(); });
-const PROMO_HOST = 'films/';
-const PROMOS = { 'Maya': 'Maya_promo.mp4', 'Blender': 'Blender_promo.mp4', 'Houdini': 'Houdini_promo.mp4', '3ds Max': '3Dsmax_promo.mp4', 'Cinema 4D': 'cinema4d_promo.mp4' };
-document.getElementById('s').addEventListener('click', () => {
-  if (!enterable || dive > 0) return;
-  enter(enterable);
-});
-const bar = document.querySelector('.bar'), menu = document.querySelector('.menu');
+
+let shown = null;
+function sync(jump) {
+  const key = location.hash.slice(1), pg = PAGES[key];
+  if (pg) {
+    if (shown !== key) {
+      if (jump) setStory(pg.i === undefined ? 1 : STOPS[2 + pg.i]);
+      fillPage(key, pg); shown = key; page.scrollTop = 0;
+    }
+    diveDir = 1;
+  } else if (shown) {
+    shown = null; diveDir = -1;
+    const v = page.querySelector('video'); if (v) v.pause();
+  }
+}
+const go = (key, jump = true) => {
+  if (key !== location.hash.slice(1)) history.pushState({ n: ((history.state || {}).n || 0) + 1 }, '', key ? '#' + key : location.pathname + location.search);
+  sync(jump);
+};
+const goBack = () => {
+  if ((history.state || {}).n) { history.back(); return; }
+  history.replaceState(null, '', location.pathname + location.search); sync();
+};
+addEventListener('popstate', () => sync(true));
+svg.addEventListener('click', () => { if (enterable && dive === 0 && !diveDir) go(enterable.key, false); });
+
+const bar = document.querySelector('.bar'), menu = document.getElementById('menu');
 document.getElementById('burger').onclick = e => { e.stopPropagation(); bar.classList.toggle('open'); };
-menu.addEventListener('click', e => { e.stopPropagation(); menu.classList.toggle('open'); });
-addEventListener('click', () => { bar.classList.remove('open'); menu.classList.remove('open'); });
+document.getElementById('menuBtn').onclick = e => { e.stopPropagation(); menu.classList.remove('shut'); menu.classList.toggle('open'); };
+menu.addEventListener('mouseleave', () => menu.classList.remove('shut'));
+addEventListener('click', e => {
+  const a = e.target.closest('a[href^="#"]');
+  if (a) {
+    e.preventDefault();
+    const key = a.getAttribute('href').slice(1);
+    go(key);
+    if (!key) { setStory(0); auto = !CALM; }
+    if (menu.contains(a)) menu.classList.add('shut');
+    a.blur();
+  }
+  bar.classList.remove('open'); menu.classList.remove('open');
+});
 let touchY = null;
-addEventListener('touchstart', e => { touchY = e.touches[0].clientY; }, { passive: true });
+addEventListener('touchstart', e => { touchY = e.target.closest('.bar') ? null : e.touches[0].clientY; }, { passive: true });
 addEventListener('touchmove', e => {
   if (touchY === null || dive > 0) return; e.preventDefault();
   const dy = touchY - e.touches[0].clientY;
-  if (Math.abs(dy) >= 60) { step(Math.sign(dy)); touchY = e.touches[0].clientY; }
+  if (Math.abs(dy) >= 60) { userStep(Math.sign(dy)); touchY = e.touches[0].clientY; }
 }, { passive: false });
 addEventListener('keydown', e => {
-  if (e.key === 'Escape' && dive === 1) { document.getElementById('back').click(); return; }
-  if (dive > 0) return;
-  if (e.key === 'Enter' && enterable) { e.preventDefault(); enter(enterable); return; }
-  const k = { ArrowDown: 1, PageDown: 1, ' ': 1, ArrowUp: -1, PageUp: -1 }[e.key];
-  if (k !== undefined) { e.preventDefault(); step(k); }
+  if (e.key === 'Escape') { bar.classList.remove('open'); menu.classList.remove('open'); if (dive === 1) goBack(); return; }
+  if (dive > 0 || diveDir) return;
+  const onControl = !!e.target.closest('a, button');
+  if (e.key === 'Enter' && enterable && !onControl) { e.preventDefault(); go(enterable.key, false); return; }
+  const k = { ArrowDown: 1, PageDown: 1, ArrowUp: -1, PageUp: -1 }[e.key] || (e.key === ' ' && !onControl ? 1 : 0);
+  if (k) { e.preventDefault(); userStep(k); }
   if (e.key === 'Home') { e.preventDefault(); want = 0; }
   if (e.key === 'End') { e.preventDefault(); want = 1; }
 });
-let cur = prog();
-const onScroll = () => render(cur);
 
 const ends = document.getElementById('ends');
 for (const [key, e] of Object.entries(ENDS)) {
   const b = document.createElement('button'); b.textContent = e.label; if (key === END) b.className = 'on';
-  b.onclick = () => { END = key; [...ends.children].forEach(x => x.classList.toggle('on', x === b)); onScroll(); };
+  b.onclick = () => { END = key; [...ends.children].forEach(x => x.classList.toggle('on', x === b)); render(cur); };
   ends.appendChild(b);
 }
-let tw = { from: 0, to: 0, t0: 0, dur: 1 }, arrived = 0;
-const HOLD = 2100;
+const HOLD = 4000;
 let overDia = false;
-const svgEl = document.getElementById('s');
-svgEl.addEventListener('mouseenter', () => { overDia = true; });
-svgEl.addEventListener('mouseleave', () => { overDia = false; });
-let t0 = null;
+svg.addEventListener('mouseenter', () => { overDia = true; });
+svg.addEventListener('mouseleave', () => { overDia = false; });
+document.addEventListener('visibilitychange', () => { arrived = performance.now(); lastT = null; });
+if (PAGES[location.hash.slice(1)]) { sync(true); dive = 1; diveDir = 0; }
+let t0 = null, lastT = null, drawn = '';
 (function frame(t) {
   if (t0 === null) t0 = t;
+  const dt = lastT === null ? 0 : Math.min(50, t - lastT); lastT = t;
   introK = Math.min(1, (t - t0) / 1600);
   if (diveDir) {
-    dive = clamp01(dive + diveDir * (diveDir > 0 ? 1 / 54 : 1 / 42));
+    dive = CALM ? (diveDir > 0 ? 1 : 0) : clamp01(dive + diveDir * dt / (diveDir > 0 ? 900 : 700));
     if (dive === 0) arrived = t;
     if (dive === 0 || dive === 1) diveDir = 0;
   }
-  page.hidden = dive < 0.6;
-  page.style.opacity = clamp01((dive - 0.6) / 0.4);
-  const target = prog();
-  if (target !== tw.to) tw = { from: cur, to: target, t0: t, dur: Math.min(2000, 400 + Math.abs(target - cur) * 9500) };
+  if (want !== tw.to) tw = { from: cur, to: want, t0: t, dur: Math.min(2400, 400 + Math.abs(want - cur) * 14000) };
   const k = clamp01((t - tw.t0) / tw.dur);
   cur = lerp(tw.from, tw.to, ease(k));
   if (k >= 1 && arrived < tw.t0) arrived = t;
-  const playing = want >= STOPS[1] - 1e-6 && want < 1;
+  const playing = auto && want >= STOPS[1] - 1e-6 && want < 1;
   const hold = want < STOPS[2] - 1e-6 ? HOLD + 600 : HOLD;
-  if (playing && k >= 1 && dive === 0 && !overDia && t - arrived > hold) step(1);
-  render(cur);
+  if (playing && k >= 1 && dive === 0 && !diveDir && !overDia && !bar.classList.contains('open') && t - arrived > hold) step(1);
+  const state = cur + '|' + introK + '|' + dive;
+  if (state !== drawn) {
+    drawn = state;
+    page.hidden = dive < 0.6;
+    page.style.opacity = clamp01((dive - 0.6) / 0.4);
+    render(cur);
+  }
   requestAnimationFrame(frame);
 })(performance.now());
 </script>

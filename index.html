@@ -214,24 +214,46 @@ const PRODUCT_LINES = {
   'ZBrush': 'your sculpt, straight into ComfyUI', 'Babylon': 'the free, open-source edition',
 };
 const GLTF_LINE = 'glTF models into Maya, Blender, Houdini, 3ds Max and Cinema 4D';
-const PASSES = ['Render passes', 'Depth, normals, edges and more, frame by frame.'];
-const TO_AI = ['Send to AI', 'Feed the passes to image and video models.'];
+const PASSES = ['Render passes', 'Depth, normals, edges, and path-traced reference shots.',
+  'Colour, a grey clay pass, depth, normals and edges, for one frame or a whole range, each on its own output of the node. A path tracer renders reference shots with real light.'];
+const TO_AI = ['Send to AI', 'Feed the passes to image and video models.',
+  'The passes arrive in ComfyUI as images and sequences, ready for any image or video model. A ready-made workflow is included to get you started.'];
 const TILES = {
-  'Cascadeur': [['Live sync', 'Animate in Cascadeur; the scene follows in ComfyUI.'], ['Animation', 'Characters, their animation and the camera come across.'], PASSES, TO_AI],
-  'ZBrush': [['GoZ', 'Press GoZ in ZBrush; your SubTools arrive in ComfyUI.'], ['Light and shade', 'HDRI lighting and a material gallery, in the viewer.'],
-             ['Camera', 'Keyframe the camera, or use a turntable.'], ['Send to AI', 'Feed frames and sequences to image and video models.']],
-  'Babylon': [['Free', 'Open source, MIT licence. No 3D program needed.'], ['Scene sync', 'Sync a scene from the Babylon.js Sandbox into ComfyUI.'],
-              ['Render passes', 'Colour, depth and normals, for a frame or a range.'], ['FX Script', 'A live script editor with 26 effect presets.']],
+  'Cascadeur': [['Live sync', 'Animate in Cascadeur; the scene follows in ComfyUI.',
+                 'The current Cascadeur scene comes across with its characters, animation and camera, straight from the app, with no files to export.'],
+                ['Animation', 'Characters, their animation and the camera come across.',
+                 'Skinned characters play in the viewer frame by frame, seen through your Cascadeur camera. Light them and drop materials on them there.'], PASSES, TO_AI],
+  'ZBrush': [['GoZ', 'Press GoZ in ZBrush; your SubTools arrive in ComfyUI.',
+              'ComfyUI becomes a GoZ target. Each press sends your SubTools with their polypaint and UVs, and pressing again after an edit updates them.'],
+             ['Light and shade', 'HDRI lighting and a material gallery, in the viewer.',
+              'Light the sculpt with an HDRI and a key light, add fog, and drop materials from the gallery. A path tracer renders the finished frames.'],
+             ['Camera', 'Keyframe the camera, or use a turntable.',
+              'The camera animation lives in the viewer: set keys on the timeline, or let a turntable turn around your model.'],
+             ['Send to AI', 'Feed frames and sequences to image and video models.',
+              'Captured frames and rendered sequences arrive in ComfyUI as images, ready for any image or video model.']],
+  'Babylon': [['Free', 'Open source, MIT licence. No 3D program needed.',
+               'The open-source member of the CUB◇ family. It needs only a browser and ComfyUI, and shares its viewer with the other editions.'],
+              ['Scene sync', 'Sync a scene from the Babylon.js Sandbox into ComfyUI.',
+               'A bookmark button on the Babylon.js Sandbox page sends the scene and its animation clips to the viewer. Orbit in the Sandbox and the viewer follows.'],
+              ['Render passes', 'Colour, depth and normals, for a frame or a range.',
+               'Render colour, depth and normal passes of any frame or animation range, stack them as layers, and send them to the node\'s outputs.'],
+              ['FX Script', 'A live script editor with 26 effect presets.',
+               'Write JavaScript that runs on the viewer\'s scene, or start from one of 26 presets: particles, weather, fire, water, fog, magic, light and shaders.']],
   'gltf': [['Model libraries', 'Sketchfab, Poly Pizza, Polyfork, Moho and EZ-Tree, from one panel in your 3D program.',
-            'Search Sketchfab, Poly Pizza and Polyfork, filter by licence, and see a model\'s size and licence before you import it. Moho exports and EZ-Tree trees arrive through the same panel.'],
-           ['Optimizer', 'Reduce triangles and texture size, with a preview before you accept.',
+            'Search Sketchfab, Poly Pizza and Polyfork, filter by licence, and check a model\'s size before you import it. Moho exports and EZ-Tree trees use the same panel.'],
+           ['Optimizer', 'Reduce triangles and texture size, with a preview.',
             'The Optimizer lists the models you imported and reduces the ones you pick: fewer triangles and smaller textures. Switch between the new and the original, then accept or discard.'],
            ['Rigs and animation', 'Skinned characters come in with their animation.',
             'Skeletons, skin weights and animation curves come in with the model, so a skinned character plays on your timeline right after the import.'],
            ['Your files', 'Import .glb and .gltf files from disk.',
             'Drop .glb or .gltf files on the panel, or browse for them. The list of recent imports brings a file back with one click.']],
 };
-const tilesFor = name => TILES[name] || [['Live sync', `Work in ${name}; the scene follows in ComfyUI.`], ['FX', 'Smoke, liquids, splats and lights, added in the viewer.'], PASSES, TO_AI];
+const tilesFor = name => TILES[name] || [
+  ['Live sync', `Work in ${name}; the scene, cameras and cuts follow in ComfyUI.`,
+   `The scene comes across in one click, with its animation. Look through your ${name} cameras, cut between them on the timeline, and see the shot while you work.`],
+  ['FX', 'Effects, materials and lights, added in the viewer.',
+   'Drag effects into the scene: fire, smoke, weather, water and more. Drop materials on your meshes, and light the scene with an HDRI, a sky or your own lights.'],
+  PASSES, TO_AI];
 const PROMOS = { 'Maya': 'Maya_promo.mp4', 'Blender': 'Blender_promo.mp4', 'Houdini': 'Houdini_promo.mp4', '3ds Max': '3Dsmax_promo.mp4', 'Cinema 4D': 'cinema4d_promo.mp4' };
 
 const PAGES = {

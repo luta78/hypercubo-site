@@ -67,8 +67,8 @@
   .page.scroll { overflow-y:auto; }
   .page .foot { flex:0 0 auto; padding:9px max(16px, 5vw); border-top:1px solid var(--line); background:#101114; }
   .page .hero { position:relative; flex:1 1 auto; min-height:0; overflow:hidden; background:#0c0d0f; }
-  .page .hero video { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
-  .page .hero .shade { position:absolute; inset:0; background:linear-gradient(to top, rgba(19,20,23,.92) 0%, rgba(19,20,23,.35) 45%, rgba(19,20,23,0) 70%), linear-gradient(to right, rgba(19,20,23,.55), rgba(19,20,23,0) 60%); }
+  .page .hero video, .page .hero img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+  .page .hero img { object-position:left top; }  .page .hero .shade { position:absolute; inset:0; background:linear-gradient(to top, rgba(19,20,23,.92) 0%, rgba(19,20,23,.35) 45%, rgba(19,20,23,0) 70%), linear-gradient(to right, rgba(19,20,23,.55), rgba(19,20,23,0) 60%); }
   .page .hero .txt { position:absolute; left:max(16px, 5vw); right:max(16px, 5vw); bottom:clamp(18px, 4vh, 40px); }
   .page .hero .tag { position:absolute; right:16px; top:14px; font:11px 'JetBrains Mono', Consolas, monospace; letter-spacing:.06em; color:#cfd2d7; background:rgba(19,20,23,.6); padding:4px 8px; }
   .page .back { display:flex; background:none; border:0; padding:0; cursor:pointer; transition:transform .25s, filter .25s; }
@@ -139,8 +139,7 @@
     .page.list .hero { height:44vh; }
     .page .feats, .page .cards { grid-template-columns:1fr; }
     .page .sub { font-size:14px; }
-    .page .hero .tag { display:none; }
-  }
+    .page .hero .tag { display:none; }  }
 </style>
 </head>
 <body>
@@ -218,7 +217,7 @@ const TILES = {
              ['Camera', 'Keyframe the camera, or use a turntable.'], ['Send to AI', 'Feed frames and sequences to image and video models.']],
   'Babylon': [['Free', 'Open source, MIT licence. No 3D program needed.'], ['Scene sync', 'Sync a scene from the Babylon.js Sandbox into ComfyUI.'],
               ['Render passes', 'Colour, depth and normals, for a frame or a range.'], ['FX Script', 'A live script editor with 26 effect presets.']],
-  'gltf': [['Model libraries', 'Search Sketchfab, Poly Pizza and Polyfork from a panel in your 3D program.'], ['Materials', 'PBR materials come in with their textures.'],
+  'gltf': [['Model libraries', 'Sketchfab, Poly Pizza, Polyfork, Moho and EZ-Tree, from one panel in your 3D program.'], ['Optimizer', 'Reduce triangles and texture size, with a preview before you accept.'],
            ['Rigs and animation', 'Skinned characters come in with their animation.'], ['Your files', 'Import .glb and .gltf files from disk.']],
 };
 const tilesFor = name => TILES[name] || [['Live sync', `Work in ${name}; the scene follows in ComfyUI.`], ['FX', 'Smoke, liquids, splats and lights, added in the viewer.'], PASSES, TO_AI];
@@ -226,7 +225,7 @@ const PROMOS = { 'Maya': 'Maya_promo.mp4', 'Blender': 'Blender_promo.mp4', 'Houd
 
 const PAGES = {
   products: { title: 'Products', sub: 'ComfyUI nodes for seven 3D programs, a free open-source edition, and glTF importers for five.' },
-  gltf: { title: 'CUB◇ GLTF importers', sub: GLTF_LINE + '.', tiles: TILES.gltf },
+  gltf: { title: 'CUB◇ GLTF importers', sub: GLTF_LINE + '.', tiles: TILES.gltf, image: 'img/gltf_maya.jpg' },
   gallery: { title: 'Gallery', body: '<p>Images and films made with CUB◇ arrive with the release.</p>' },
   docs: { title: 'Docs', body: '<p>Every CUB◇ pack includes its manual.</p><p>The online manuals arrive with the release.</p>' },
   about: { title: 'About', body:
@@ -497,7 +496,8 @@ function fillPage(key, pg) {
       ? `<div class="cards">${FORKS.map(([name, hex]) => `<a class="card" href="#${slug(name)}">${smallDia(hex, 28)}<div><b>${cubPrefix(name)}${name}</b><span>${PRODUCT_LINES[name]}</span></div></a>`).join('')}`
         + `<a class="card wide" href="#gltf">${smallDia(null, 28)}<div><b>CUB◇ GLTF importers</b><span>${GLTF_LINE}</span></div></a></div>`
       : `<div class="feats">${pg.tiles.map(([b, s], i) => `<button class="feat${i ? '' : ' on'}" data-i="${i}"><div class="thumb">image</div><div><b>${b}</b><span>${s}</span></div></button>`).join('')}</div>`;
-    page.innerHTML = `<div class="hero"><video autoplay muted loop playsinline src="${promo}"></video><div class="shade"></div>${RET}
+    const media = pg.image ? `<img src="${pg.image}" alt="${pg.title}">` : `<video autoplay muted loop playsinline src="${promo}"></video>`;
+    page.innerHTML = `<div class="hero">${media}<div class="shade"></div>${RET}
       ${TEST ? '<div class="tag" id="ptag"></div>' : ''}
       <div class="txt"><div class="head"><button class="back" id="back" title="back" aria-label="back">${smallDia(pg.hex)}</button><h1>${title}</h1></div>
         <p class="sub">${pg.sub}</p>${soon}</div></div>${grid}${FOOT}`;
